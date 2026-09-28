@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProcessUriSchema",
+  "description": "Standard schema for Process URI and Resource URN actions",
+  "type": "object",
+  "required": ["uri"],
+  "properties": {
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical RFC 3986 Action URI or Resource URN"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Parameters payload conforming to action schema"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["nl_deterministic", "llm_gbnf", "direct_dsl"] },
+        "raw_prompt": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    }
+  }
+}
