@@ -50,9 +50,9 @@
     ".governance/intent.schema.json": "28c270b861fce6d7dd7827af089d32d719917efb1a1239c96d2691a6a08c7ce6",
     ".governance/lock.schema.json": "ad80c98f800a4a3310870336dcdaf0aa689cc4988f71084d25d76bea2df1242f",
     ".governance/managed-copies.json": "c94bb38d048d517d541ac8ad7fc47d3f531471d88c713634b1d5889fd8e871d7",
-    ".governance/manifest.base.json": "445b718d2c7144a264a1313986372a581790e93152900eb2338500aaee8c4a9c",
+    ".governance/manifest.base.json": "864f7d64bf33ffdf7f1c4c6525279852b8de9df4728007d70489bc806cbc69bf",
     ".governance/manifest.schema.json": "6caeb5295678e15427daacc92c60c2a06d2279964ed965e08207b11a2b846f3e",
-    ".governance/package-manifest.json": "5ed2e4e45d38972548a7ac37cbd0de774d526ada3c944ea170dfc84c6b7a9156",
+    ".governance/package-manifest.json": "bbaa34b46ca94f7db75bf5102e955cf1991d347a348ffe53af73806ca6710f43",
     ".governance/physical-contracts.schema.json": "df69632961d6936d961d9cba21e82e96dac96a8b52d9b3e36ed7e13e5a01b403",
     ".governance/precommit_standard_update.py": "c91e2bf9ae9d6ccc77bce0e61450c818a5961edee5bfde3b60426da88e296b0f",
     ".governance/prune_merged_worktrees.py": "1fef90ad396829a1a877832bf35939773fc3596efc1242f8e263ae214bd90d9b",
@@ -63,11 +63,11 @@
     ".governance/required-checks.schema.json": "465f004d0e30f21e60e59c8b7860cc33db059e383e272e3caa267df7f24437f5",
     ".governance/snapshot-migration.schema.json": "37e97ca683254a66d1a83576e3a4293e37663d38efb0cbc94e9deec1dd58b5ca",
     ".governance/snapshot_allocation.py": "31c7fa7f94139ab221be61e6f2011a433fe09b5c1712aa5c00ef8cf9b2d7b878",
-    ".governance/snapshot_migration.py": "fba93c1be632a7b1d47374fb6b31e228f969445de4207b8c2d6fb43af274b94e",
+    ".governance/snapshot_migration.py": "5e15b8b9f9835e7f2177e713c30e97545b79dbb9d2e23a22209c7375ec73a034",
     ".governance/stack-profiles.json": "47a3b899553968dfc5e0565c0de525f13aadde5dacae4556614572a731054f0e",
     ".governance/standard-adoption.schema.json": "d9c58e86d11ebd23174ed8a5c209c13ae96bd4cd34b7866ac8c61a66de19bc9b",
     ".governance/standard-packs.json": "027b188c9b60a94dc29e8fb0fb9ee07307dacfd0067e44c91206475c3e423794",
-    ".governance/standard_pack_check.py": "55ff49cca8560eefbd1d67bdf3612251c9b9a95d3e3994e507ce0e722dc93d7a",
+    ".governance/standard_pack_check.py": "55e232701d3a968a468cc351d642981a7f7b700a578a6e470072a040fc305ae5",
     ".governance/templates/conftest-worktree-bootstrap.py": "1901fb6924b844915479d5ef781d6bca16232f6f1d2b93dcf93bb2c70bd9663b",
     ".governance/terminal-receipt-registry.schema.json": "799dac322e708421a1ff2dbb00408a47cd05f7021c87920d1d37a1e70fe671f9",
     ".governance/ticket-activity-override.schema.json": "070f22044fba29e1a09543d7236b3105aa9127b9c22229f3e3d9aa067c6c8d17",
@@ -86,7 +86,7 @@
     ".governance/work-classification.schema.json": "f5c2b518238543589e4f8d3805cc6455e19d6919643644aaeae034abf472a467",
     ".governance/work-continuity.schema.json": "5134e6884ddaa4fb3a0ffd200d281afb0f3b868b06f71d65e3da6b42f6fe0830",
     ".governance/work-start-report.schema.json": "af3a86ad2bd6e40c3c770ec2c879e1e78f3d37d70583b734ffd58d2a14b2e8d6",
-    ".governance/work_continuity.py": "43402de7e0a899bdeb284dbf2535032b59517d697eafc057c38d03691afd5e92",
+    ".governance/work_continuity.py": "eec7d723e59c5368be4e5fa77a2c7bf42e4d1844509239c8f5a1f54009be6c75",
     ".governance/work_start_check.py": "6e24696d16c9e81e08f5717765de511af81e39065b599d6545f058ffd168bbd6",
     ".governance/workspace_lifecycle_check.py": "f7ee9bb7a9d43d90a6f754888f1dd325064f58b50869b61d0a34c17be376421a",
     ".governance/worktree_guard.py": "b154f6e67626770ec11c9544d31a27b32d9c215ef73ffc9eb8f52e9c3a9b051b",
@@ -106,14 +106,14 @@
     "scripts/install-agent-hosts.sh": "19fb8fa511f9fd0cef41bdcfa244bc9dbee43d1175148161ca1d652060627482",
     "scripts/runtime.sh": "27ec7c0ff9ba3e16be5438ce2fd938a0e1dd34cc3a3627bf97155a83f4304306",
     "wellmanifest_governance.py": "fcf93315732986375727d92aaeb2becc6c1d3a7144a90112e0ccd303e8cfb75f",
-    "worktree-guard.yaml": "bea3d3cda9bd764f9e79b975da8f5360df894fdc04fca0407def88ebd49111b7"
+    "worktree-guard.yaml": "8533a7c03a121a6df68b89cab212187313ffb0720aaf457941439148a25c3345"
   },
   "schema": "new-project.lock/v1",
   "standard": {
     "id": "wellmanifest/new-project",
     "publicationStatus": "published",
     "sourceRepository": "wellmanifest/new-project",
-    "sourceRevision": "51d2a12d8a0888f9c8aa7958b177806647e7ef70",
-    "version": "0.20.55"
+    "sourceRevision": "cfcc2f9c3d16e4306deb5606599b7f6393008682",
+    "version": "0.20.57"
   }
 }
