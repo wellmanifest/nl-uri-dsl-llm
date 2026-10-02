@@ -50,7 +50,7 @@
     ".governance/intent.schema.json": "28c270b861fce6d7dd7827af089d32d719917efb1a1239c96d2691a6a08c7ce6",
     ".governance/lock.schema.json": "ad80c98f800a4a3310870336dcdaf0aa689cc4988f71084d25d76bea2df1242f",
     ".governance/managed-copies.json": "c94bb38d048d517d541ac8ad7fc47d3f531471d88c713634b1d5889fd8e871d7",
-    ".governance/manifest.base.json": "864f7d64bf33ffdf7f1c4c6525279852b8de9df4728007d70489bc806cbc69bf",
+    ".governance/manifest.base.json": "cdd83cb2295578cde2b5e0ad518f7aed3c7c5aa281ccf2031c24d0062d1b216b",
     ".governance/manifest.schema.json": "6caeb5295678e15427daacc92c60c2a06d2279964ed965e08207b11a2b846f3e",
     ".governance/package-manifest.json": "bbaa34b46ca94f7db75bf5102e955cf1991d347a348ffe53af73806ca6710f43",
     ".governance/physical-contracts.schema.json": "df69632961d6936d961d9cba21e82e96dac96a8b52d9b3e36ed7e13e5a01b403",
@@ -88,9 +88,9 @@
     ".governance/work-start-report.schema.json": "af3a86ad2bd6e40c3c770ec2c879e1e78f3d37d70583b734ffd58d2a14b2e8d6",
     ".governance/work_continuity.py": "eec7d723e59c5368be4e5fa77a2c7bf42e4d1844509239c8f5a1f54009be6c75",
     ".governance/work_start_check.py": "6e24696d16c9e81e08f5717765de511af81e39065b599d6545f058ffd168bbd6",
-    ".governance/workspace_lifecycle_check.py": "f7ee9bb7a9d43d90a6f754888f1dd325064f58b50869b61d0a34c17be376421a",
-    ".governance/worktree_guard.py": "b154f6e67626770ec11c9544d31a27b32d9c215ef73ffc9eb8f52e9c3a9b051b",
-    ".governance/worktree_overlap_check.py": "a7d17aa36344cbf644437e5f5d3b9dc4d8a264863bae2e80198b147f21d4b84d",
+    ".governance/workspace_lifecycle_check.py": "f264154a69c2c00a9218e6dbff87dcf2a3179768d94b4086374f001da6aa411f",
+    ".governance/worktree_guard.py": "16408421c577a8c2eedd24800b69c116b3af11a4046d9533a470d67e4e4d0f4a",
+    ".governance/worktree_overlap_check.py": "c4a97d67d9b3c47c4b2690e8b8fcfe7e68daff61e20b20d3849ccc08c5c38174",
     ".governance/worktree_path_check.py": "fad10912f3b14913cc348880996b636ba0d31ea66a853dd264b53e4e66f17feb",
     ".governance/worktrees.lock.json": "5d42f7a7a1afc319dd8f670730f564271d886e22fe7ea61dd0d12911e7ce05ca",
     ".governance/worktrees.schema.json": "bb5989c19ee33d9beafa34576ef568ef70384a664ccf763ac2e29dde3a464756",
@@ -113,7 +113,7 @@
     "id": "wellmanifest/new-project",
     "publicationStatus": "published",
     "sourceRepository": "wellmanifest/new-project",
-    "sourceRevision": "cfcc2f9c3d16e4306deb5606599b7f6393008682",
-    "version": "0.20.57"
+    "sourceRevision": "c3b3e4b3c9818db027e6c171a8131f866128499b",
+    "version": "0.20.58"
   }
 }
