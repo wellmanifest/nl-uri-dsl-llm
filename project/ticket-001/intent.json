@@ -1,0 +1,156 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-001",
+  "summary": "Deliver the preserved multilingual semantic URI profile with pinned governance and conformance CI",
+  "workstream": "governance",
+  "classification": {
+    "kind": "FEATURE",
+    "priority": "P1",
+    "origin": "requested"
+  },
+  "allowedPaths": [
+    ".gitignore",
+    ".planfile/tickets/ticket-001.yaml",
+    "README.md",
+    "profiles/semantic-v1.json",
+    "spec/SEMANTIC_NL_PLAN.md",
+    "tests/test_semantic_profile.py",
+    ".governance/**",
+    ".githooks/**",
+    ".cursor/rules/**",
+    ".github/copilot-instructions.md",
+    ".github/workflows/new-project-governance.yml",
+    ".github/workflows/semantic-profile.yml",
+    ".aider.conf.yml",
+    ".subactor/manifest.json",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "VERSION",
+    "CHANGELOG.md",
+    "TODO.md",
+    "project/**",
+    "project.sh",
+    "project.bat",
+    "scripts/install-agent-hosts.sh",
+    "scripts/runtime.sh",
+    "wellmanifest_governance.py",
+    "worktree-guard.yaml",
+    "goal.yaml",
+    ".gitattributes",
+    ".subactor/.gitignore",
+    ".github/workflows/new-project-branch-hygiene.yml"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "be831f34ee984007fbb8b6b31276de85b70e518d",
+    "targetBranch": "main",
+    "outcome": "Preserve the accepted inert Unicode multilingual semantic URI profile and finish native immutable governance adoption, real conformance CI, and independently approved exact-head publication of PR #1.",
+    "nonGoals": [
+      "Implement hosted inference or execution",
+      "Grant plan or model output execution authority",
+      "Replace or discard the previous owner source",
+      "Bypass protected publication"
+    ],
+    "complexity": "L",
+    "estimatedMinutes": 45,
+    "budgets": {
+      "maxImplementationFiles": 15,
+      "maxAffectedComponents": 3,
+      "maxPublicInterfaceChanges": 1,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "The domain pack retains the existing semantic profile. Adopt only the published immutable standard through Goal, recover its already allocated identity under the external fenced controller, and keep execution owned by dockuri.",
+      "components": [
+        {
+          "name": "semantic-standard",
+          "paths": [
+            "README.md",
+            "profiles/semantic-v1.json",
+            "spec/SEMANTIC_NL_PLAN.md",
+            "tests/test_semantic_profile.py"
+          ]
+        },
+        {
+          "name": "native-adoption",
+          "paths": [
+            ".gitignore",
+            ".planfile/tickets/ticket-001.yaml",
+            ".gitattributes",
+            ".governance/**",
+            ".githooks/**",
+            ".cursor/rules/**",
+            ".subactor/**",
+            ".aider.conf.yml",
+            "AGENTS.md",
+            "CLAUDE.md",
+            "GEMINI.md",
+            "project/**",
+            "project.sh",
+            "project.bat",
+            "scripts/install-agent-hosts.sh",
+            "scripts/runtime.sh",
+            "wellmanifest_governance.py",
+            "worktree-guard.yaml",
+            "goal.yaml"
+          ]
+        },
+        {
+          "name": "conformance-delivery",
+          "paths": [
+            ".github/**",
+            "VERSION",
+            "CHANGELOG.md"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert the merged domain-pack commit through protected publication; retain native recovery and owner handoff receipts."
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "python3 -m pytest tests/test_semantic_profile.py -q"
+        ],
+        "evidence": "The accepted Unicode-preserving nonexecuting semantic profile passes conformance."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "./project/governance-check.sh --actor agent",
+          "goal governance adopt --source-revision 51d2a12d8a0888f9c8aa7958b177806647e7ef70 --target-root . --check"
+        ],
+        "evidence": "The pinned package is production published and immutable; native fenced identity recovery and governance pass."
+      },
+      {
+        "criterion": "AC-03",
+        "commands": [
+          "gh pr view 1 --repo wellmanifest/nl-uri-dsl-llm --json state,headRefOid,statusCheckRollup"
+        ],
+        "evidence": "Actual conformance and governance CI pass; independently approved protected exact-head merge and deleted ticket branch are verified."
+      }
+    ],
+    "standardAdoption": {
+      "sourceRepository": "wellmanifest/new-project",
+      "fromRevision": null,
+      "toRevision": "51d2a12d8a0888f9c8aa7958b177806647e7ef70"
+    }
+  }
+}

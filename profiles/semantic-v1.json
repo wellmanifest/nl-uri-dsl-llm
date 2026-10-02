@@ -1,0 +1,12 @@
+{
+  "profile": "semantic-v1",
+  "envelope": "wellmanifest.nl-plan/v1",
+  "normative_source": "wellmanifest/nl-dsl-llm:spec/SEMANTIC_NL_PLAN.md",
+  "runtime_owner": "paxlet-com/dockuri",
+  "retrieval": "multilingual-semantic",
+  "unicode": "preserve",
+  "lexical_admission": false,
+  "compilation_executes": false,
+  "statuses": ["ok", "clarify", "unsupported"],
+  "plans": ["call", "sequence"]
+}
