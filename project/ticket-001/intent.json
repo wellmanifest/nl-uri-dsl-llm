@@ -135,7 +135,7 @@
         "criterion": "AC-02",
         "commands": [
           "./project/governance-check.sh --actor agent",
-          "goal governance adopt --source-revision 2b31334d4b98768d40c1c46224e44609131fe9f5 --target-root . --check"
+          "goal governance adopt --source-revision 30ada2d6f171ee11d029a07ea55d1993c25c7fe0 --target-root . --check"
         ],
         "evidence": "The pinned package is production published and immutable; native fenced identity recovery and governance pass."
       },
@@ -150,7 +150,7 @@
     "standardAdoption": {
       "sourceRepository": "wellmanifest/new-project",
       "fromRevision": null,
-      "toRevision": "2b31334d4b98768d40c1c46224e44609131fe9f5"
+      "toRevision": "30ada2d6f171ee11d029a07ea55d1993c25c7fe0"
     }
   }
 }
