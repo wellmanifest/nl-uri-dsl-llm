@@ -87,3 +87,7 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-004 (Parameter Schema Validation)`**: Przed przekazaniem do wykonawcy parametry URI muszą przejść walidację JSON-Schema zarejestrowaną w `ProcessUriRegistry`.
 - **`NUL-005 (Sandbox Isolation)`**: Operacje zewnętrzne (`sandbox://`, `pypi://`) muszą być domyślnie izolowane procesowo lub kontenerowo (`--network=none` lub dedykowany worktree v5).
 - **`NUL-006 (Closed-Loop Receipt)`**: Każde wykonanie musi wyemitować raport ze statusem i artefaktami powiązanymi z identyfikatorem biletu / zasobu URN.
+
+## Optional semantic profile
+
+[Semantic multilingual URI DSL](spec/SEMANTIC_NL_PLAN.md) replaces NL word rules within the explicitly selected `semantic-v1` profile. [Machine profile](profiles/semantic-v1.json) adopts the shared validated plan envelope; legacy exact DSL and PL/EN behavior remain compatible. This is a candidate extension until independent protected publication and pinned adoption.

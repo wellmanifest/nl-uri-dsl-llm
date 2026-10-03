@@ -1,0 +1,6 @@
+schema: planfile.ticket/v1
+id: ticket-001
+title: Semantic multilingual NL to validated operation plan
+type: feature
+status: in_progress
+owner: wellmanifest/nl-uri-dsl-llm

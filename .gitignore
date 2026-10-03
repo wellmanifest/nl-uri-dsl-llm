@@ -1,0 +1,16 @@
+
+/.subactor/leases/
+
+# Clone-local operational state
+/.worktrees/
+/.subactor/leases/
+/.subactor/sessions/
+/.subactor/recovery/
+/.subactor/receipts/
+/.subactor/cache/
+/.subactor/snapshots/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+/.governance/.observation-failures.log
