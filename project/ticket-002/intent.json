@@ -1,0 +1,106 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-002",
+  "summary": "Bind URI execution to URN resources and explicit outcomes",
+  "workstream": "governance",
+  "classification": {
+    "kind": "FEATURE",
+    "priority": "P1",
+    "origin": "requested"
+  },
+  "allowedPaths": [
+    "project/ticket-002/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    "CHANGELOG.md",
+    "README.md",
+    "VERSION",
+    "profiles/semantic-v1.json",
+    "spec/SEMANTIC_NL_PLAN.md",
+    "tests/test_semantic_profile.py",
+    ".github/workflows/semantic-profile.yml"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "0b9f0f11647607b711ad248b978c13f95dbd33e2",
+    "targetBranch": "main",
+    "outcome": "Publish a typed URI/URN exchange profile with correlation, immutable contract/data bindings and truthful execution outcomes; verify its negative conformance cases.",
+    "nonGoals": [
+      "Deploy a model or grant repository admission",
+      "Modify foreign Willman KVM work",
+      "Claim that schema conformance proves authorized execution"
+    ],
+    "complexity": "M",
+    "estimatedMinutes": 35,
+    "budgets": {
+      "maxImplementationFiles": 9,
+      "maxAffectedComponents": 2,
+      "maxPublicInterfaceChanges": 1,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Extend the optional semantic profile with an inert draft-2020-12 exchange envelope. Reuse registered UUID URNs for identity and existing repository admission contracts for authorization. Runtime adapters remain product-owned.",
+      "components": [
+        {
+          "name": "exchange-profile",
+          "paths": [
+            "README.md",
+            "profiles/semantic-v1.json",
+            "spec/SEMANTIC_NL_PLAN.md",
+            "VERSION",
+            "CHANGELOG.md"
+          ]
+        },
+        {
+          "name": "conformance",
+          "paths": [
+            "tests/test_semantic_profile.py",
+            ".github/workflows/semantic-profile.yml"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [
+        "Optional wellmanifest.process-exchange/v1 envelope"
+      ],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert this optional profile extension through protected delivery; existing legacy and semantic plan envelopes remain valid."
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "python3 -m pytest tests/test_semantic_profile.py -q"
+        ],
+        "evidence": "Positive read/write/result envelopes and negative binding, ambiguity, outcome and authority-shape cases are validated."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "./project/governance-check.sh --actor agent"
+        ],
+        "evidence": "Native scope, lease fencing, adoption and conformance CI pass."
+      },
+      {
+        "criterion": "AC-03",
+        "commands": [
+          "gh pr view --json state,headRefOid,statusCheckRollup"
+        ],
+        "evidence": "Independent protected exact-head publication is observed, without claiming runtime adoption."
+      }
+    ]
+  }
+}

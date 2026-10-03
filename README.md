@@ -91,3 +91,10 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 ## Optional semantic profile
 
 [Semantic multilingual URI DSL](spec/SEMANTIC_NL_PLAN.md) replaces NL word rules within the explicitly selected `semantic-v1` profile. [Machine profile](profiles/semantic-v1.json) adopts the shared validated plan envelope; legacy exact DSL and PL/EN behavior remain compatible. This is a candidate extension until independent protected publication and pinned adoption.
+
+Version 1.1 adds the optional [typed URI/URN exchange profile](spec/SEMANTIC_NL_PLAN.md#optional-process-exchange-profile-version-1).
+Its JSON Schema is embedded under `exchange.schema` in the machine profile.
+It binds data UUID URNs and digests to a process URI, request/result correlation,
+governed workspace context and truthful outcomes. Admission remains an actual
+protected-controller decision; the schema and identifiers grant no authority.
+Runtime adoption and an observed execution canary are required separately.

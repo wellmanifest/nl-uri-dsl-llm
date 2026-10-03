@@ -1,3 +1,8 @@
+# 1.1.0 — 2026-10-03
+
+- Add the optional typed URI/URN process-exchange profile, request/result correlation, scoped data bindings and truthful execution outcomes.
+- Add schema conformance cases; publication of the standard does not deploy or authorize a runtime.
+
 # Changelog
 
 ## Unreleased
