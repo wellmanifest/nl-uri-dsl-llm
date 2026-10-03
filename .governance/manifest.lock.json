@@ -50,7 +50,7 @@
     ".governance/intent.schema.json": "28c270b861fce6d7dd7827af089d32d719917efb1a1239c96d2691a6a08c7ce6",
     ".governance/lock.schema.json": "ad80c98f800a4a3310870336dcdaf0aa689cc4988f71084d25d76bea2df1242f",
     ".governance/managed-copies.json": "c94bb38d048d517d541ac8ad7fc47d3f531471d88c713634b1d5889fd8e871d7",
-    ".governance/manifest.base.json": "b988b10869264fde49de7c458c78cab3526e0ffe255076fb112c5e92bcfcea56",
+    ".governance/manifest.base.json": "9b53875bc135d0b4c80a79b1b6cdda8f2e492b05e5937ca45070b3224d3a4ffb",
     ".governance/manifest.schema.json": "6caeb5295678e15427daacc92c60c2a06d2279964ed965e08207b11a2b846f3e",
     ".governance/package-manifest.json": "bbaa34b46ca94f7db75bf5102e955cf1991d347a348ffe53af73806ca6710f43",
     ".governance/physical-contracts.schema.json": "df69632961d6936d961d9cba21e82e96dac96a8b52d9b3e36ed7e13e5a01b403",
@@ -81,7 +81,7 @@
     ".governance/ticket_index_merge_driver.py": "9014a488960b80521db6c881e1628450c1ec00ff8518bbbefab2a71208eb106f",
     ".governance/ticket_input.py": "b7fa667798e3a855f8c3504b78c652b549f15cd63a32b225e2ad67b9320f0d5e",
     ".governance/ticket_recovery.py": "c6442c6d16216e88550fa5bef223fd7274f064068a15aebaffb60c7f4932d276",
-    ".governance/ticket_storage.py": "399328bbced61d9b205a5a5257decb2f312d40f29280b3536bd4f593d478a26e",
+    ".governance/ticket_storage.py": "da253fd2a7630d5c2a6cb1da71edc853d9063a35c4df9a44e96694a3783c6e3a",
     ".governance/work-classification.dsl.json": "3a947c41938c0b8ef1717957f313ff9248764252735182de30b1f2d6878748b6",
     ".governance/work-classification.schema.json": "f5c2b518238543589e4f8d3805cc6455e19d6919643644aaeae034abf472a467",
     ".governance/work-continuity.schema.json": "5134e6884ddaa4fb3a0ffd200d281afb0f3b868b06f71d65e3da6b42f6fe0830",
@@ -113,7 +113,7 @@
     "id": "wellmanifest/new-project",
     "publicationStatus": "published",
     "sourceRepository": "wellmanifest/new-project",
-    "sourceRevision": "f48dae854be55e8efb58ff8761d85cd0dc08156c",
-    "version": "0.20.59"
+    "sourceRevision": "2b31334d4b98768d40c1c46224e44609131fe9f5",
+    "version": "0.20.60"
   }
 }
