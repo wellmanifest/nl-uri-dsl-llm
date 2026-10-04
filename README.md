@@ -79,7 +79,7 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 
 ---
 
-## 3. Normatywna Polityka Jakości (Reguły NUL-001..006)
+## 3. Normatywna Polityka Jakości (Reguły NUL-001..009)
 
 - **`NUL-001 (Deterministic First)`**: System musi najpierw podjąć próbę deterministycznego sparsowania intencji lokalnie (Levenshtein/Regex); zapytanie do LLM jest dozwolone wyłącznie jako fallback.
 - **`NUL-002 (RFC 3986 Conformance)`**: Każde legalne polecenie DSL musi być poprawnym Action URI lub Resource URN zgodnie z RFC 3986.
@@ -87,6 +87,9 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-004 (Parameter Schema Validation)`**: Przed przekazaniem do wykonawcy parametry URI muszą przejść walidację JSON-Schema zarejestrowaną w `ProcessUriRegistry`.
 - **`NUL-005 (Sandbox Isolation)`**: Operacje zewnętrzne (`sandbox://`, `pypi://`) muszą być domyślnie izolowane procesowo lub kontenerowo (`--network=none` lub dedykowany worktree v5).
 - **`NUL-006 (Closed-Loop Receipt)`**: Każde wykonanie musi wyemitować raport ze statusem i artefaktami powiązanymi z identyfikatorem biletu / zasobu URN.
+- **`NUL-007 (Conversational Stream & Process Isolation)`**: W interfejsach czatu i dialogu asystenta, strumień czatu NIE MOŻE być zanieczyszczany surowym wyjściem stdout/stderr procesów CLI/shell. Czat przechowuje wyłącznie konwersację oraz zwięzłe powiadomienie z identyfikatorem URN (`urn:<domain>:proc:<id>`) i URI (`process://<host>/<bin>?<params>`). Wyjście i sterowanie procesem trafia do dedykowanego widoku artefaktów (Terminal).
+- **`NUL-008 (Bidirectional Interactive State URL Synchronization)`**: Interaktywne interfejsy muszą utrzymywać pełną, dwukierunkową synchronizację stanu z parametrami zapytania RFC 3986 w URL (`location.search` via `history.replaceState`), gwarantującą deterministyczne odtworzenie całego stanu widoków, okien, fokusu, palet i zapytań po ponownym otwarciu adresu.
+- **`NUL-009 (Conversational & Process State Introspection Snapshot)`**: System musi udostępniać zrzut stanu w ustrukturyzowanym schemacie JSON (`wellmanifest.conversational-process-snapshot/v1`) obejmujący historię czatu, rejestr procesów i parametry URL na potrzeby audytu i narzędzi agentów AI.
 
 ## Optional semantic profile
 
@@ -98,3 +101,9 @@ It binds data UUID URNs and digests to a process URI, request/result correlation
 governed workspace context and truthful outcomes. Admission remains an actual
 protected-controller decision; the schema and identifiers grant no authority.
 Runtime adoption and an observed execution canary are required separately.
+
+## Conversational process isolation and URL state synchronization profile
+
+Version 1.2 adds the [Conversational Process Isolation and State URL Synchronization profile](spec/CONVERSATIONAL_PROCESS_ISOLATION.md) (`conversational-process-isolation-v1`).
+Machine-verifiable JSON Schema is defined in [conversational-process-snapshot.schema.json](schemas/conversational-process-snapshot.schema.json).
+This standard enforces strict separation between conversational dialogue and process execution, canonical `process://` and `urn:...` addressing, and deterministic URL state restoration proven in practice in `willmux`.

@@ -1,3 +1,10 @@
+# 1.2.0 — 2026-10-04
+
+- Add the Conversational Process Isolation and Bidirectional State URL Synchronization standard (`spec/CONVERSATIONAL_PROCESS_ISOLATION.md`).
+- Add normative rules `NUL-007` (Conversational Stream & Process Isolation), `NUL-008` (Bidirectional Interactive State URL Synchronization), and `NUL-009` (Conversational & Process State Introspection Snapshot).
+- Add machine-verifiable JSON Schema `schemas/conversational-process-snapshot.schema.json` (`wellmanifest.conversational-process-snapshot/v1`).
+- Add automated conformance tests (`tests/test_conversational_process_isolation.py`).
+
 # 1.1.0 — 2026-10-03
 
 - Add the optional typed URI/URN process-exchange profile, request/result correlation, scoped data bindings and truthful execution outcomes.

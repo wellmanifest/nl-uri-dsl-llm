@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/nl-uri-dsl-llm/conversational-process-snapshot.schema.json",
+  "title": "wellmanifest.conversational-process-snapshot/v1",
+  "description": "Standard schema for introspecting conversational chat logs, isolated process executions, and synchronized URL state.",
+  "type": "object",
+  "required": [
+    "schema",
+    "exportedAt",
+    "state",
+    "chat",
+    "processes"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "wellmanifest.conversational-process-snapshot/v1"
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "url": {
+      "type": "string"
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "layout": { "type": "string" },
+        "order": { "type": "string" },
+        "panes": { "type": "string" },
+        "focus": { "type": "string" },
+        "dialog": { "type": ["string", "null"] },
+        "activeTab": { "type": ["string", "null"] },
+        "query": { "type": "string" },
+        "targetPane": { "type": "string" },
+        "targetEnv": { "type": "string" },
+        "lastClick": { "type": "string" },
+        "act": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "chat": {
+      "type": "object",
+      "required": ["messageCount", "messages"],
+      "properties": {
+        "messageCount": { "type": "integer", "minimum": 0 },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["role", "text"],
+            "properties": {
+              "role": { "type": "string", "enum": ["user", "system", "agent", "assistant", "error"] },
+              "text": { "type": "string" },
+              "timestamp": { "type": "string" },
+              "urn": { "type": "string", "pattern": "^urn:[a-z0-9_-]+:[a-z0-9_-]+:[a-zA-Z0-9._-]+$" },
+              "uri": { "type": "string", "format": "uri" }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "processes": {
+      "type": "object",
+      "required": ["activeProcessId", "items"],
+      "properties": {
+        "activeProcessId": { "type": ["integer", "string", "null"] },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "urn", "uri", "command", "status"],
+            "properties": {
+              "id": { "type": ["integer", "string"] },
+              "urn": { "type": "string", "pattern": "^urn:[a-z0-9_-]+:proc:[a-zA-Z0-9._-]+$" },
+              "uri": { "type": "string", "pattern": "^process://[a-zA-Z0-9._-]+/.*$" },
+              "command": { "type": "string" },
+              "host": { "type": "string" },
+              "status": { "type": "string", "enum": ["running", "completed", "failed", "killed", "pending"] },
+              "exitCode": { "type": ["integer", "null"] },
+              "output": { "type": "string" },
+              "startedAt": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

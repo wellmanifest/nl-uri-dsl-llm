@@ -1,0 +1,107 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-003",
+  "summary": "Conversational process isolation and bidirectional state URL synchronization standard",
+  "workstream": "governance",
+  "classification": {
+    "kind": "FEATURE",
+    "priority": "P1",
+    "origin": "requested"
+  },
+  "allowedPaths": [
+    "project/ticket-003/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    "CHANGELOG.md",
+    "README.md",
+    "VERSION",
+    ".governance/manifest.json",
+    "spec/CONVERSATIONAL_PROCESS_ISOLATION.md",
+    "schemas/conversational-process-snapshot.schema.json",
+    "tests/test_conversational_process_isolation.py"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "b66bcda9680406c808c6805ec168f8ab9fdf3ad5",
+    "targetBranch": "main",
+    "outcome": "Standardize conversational stream purity and process isolation (NUL-007), bidirectional URL state synchronization (NUL-008), and conversational process snapshot introspection schema (NUL-009) proven in practice in willmux.",
+    "nonGoals": [
+      "Alter execution runtime or container dispatch infrastructure",
+      "Break backward compatibility with existing RFC 3986 Process URI syntax",
+      "Mandate specific frontend frameworks or proprietary state stores"
+    ],
+    "complexity": "M",
+    "estimatedMinutes": 30,
+    "budgets": {
+      "maxImplementationFiles": 8,
+      "maxAffectedComponents": 3,
+      "maxPublicInterfaceChanges": 2,
+      "maxRuntimeDependencies": 0
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Formalize the conversational process isolation and URL state synchronization pattern as normative rules NUL-007..009, provide the formal specification in spec/CONVERSATIONAL_PROCESS_ISOLATION.md, define the machine-verifiable JSON Schema wellmanifest.conversational-process-snapshot/v1, and add automated conformance tests.",
+      "components": [
+        {
+          "name": "specification",
+          "paths": [
+            "README.md",
+            "spec/CONVERSATIONAL_PROCESS_ISOLATION.md",
+            "schemas/conversational-process-snapshot.schema.json",
+            "VERSION",
+            "CHANGELOG.md"
+          ]
+        },
+        {
+          "name": "conformance",
+          "paths": [
+            "tests/test_conversational_process_isolation.py"
+          ]
+        },
+        {
+          "name": "governance",
+          "paths": [
+            ".governance/**",
+            "project/**",
+            "TODO.md"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [
+        "Normative rules NUL-007, NUL-008, NUL-009",
+        "Envelope wellmanifest.conversational-process-snapshot/v1"
+      ],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert ticket-003 through protected delivery; legacy NUL-001..006 and semantic-v1 profiles remain active."
+    },
+    "runtimeDependencies": [],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "python3 -m pytest tests/test_conversational_process_isolation.py -q"
+        ],
+        "evidence": "Schema conformance for conversational process snapshot, URI/URN addressing, and bidirectional URL serialization tests pass."
+      },
+      {
+        "criterion": "AC-02",
+        "commands": [
+          "./project/governance-check.sh --actor agent"
+        ],
+        "evidence": "Native governance check and worktree compliance pass without errors."
+      }
+    ]
+  }
+}
