@@ -94,6 +94,7 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-011 (Dossier Evidence Envelope RFC 3986 Addressing)`**: Każde zdarzenie gospodarcze, kanał źródłowy i dokument faktury musi być jednoznacznie adresowalne za pomocą Action URI (`faktury://reconcile/...`) oraz Resource URN (`urn:fin:dossier:...`, `urn:fin:source:...`).
 - **`NUL-012 (Internal Transfer vs Tax Event Demarcation)`**: Przepływy między rachunkami własnymi (`MATCHED_INTERNAL_TRANSFER`) pod rygorem błędu walidacji muszą być wyłączane z przychodów i kosztów podatkowych.
 - **`NUL-013 (Payment Gateway Fee Auto-Splitting)`**: Płatności przetwarzane przez bramki (PayPal, Stripe, PayU) z potrącaną prowizją u źródła (`Fee`) muszą być automatycznie rozbijane na kwotę brutto należności oraz odrębny koszt prowizji operacyjnej (`MATCHED_FEE_SPLIT`).
+- **`NUL-014 (Universal URN Identifier Mandate for Financial Entities)`**: Każdy artefakt dowodowy, transakcja finansowa, wiadomość e-mail, dokument faktury oraz teczka sprawy MUSZĄ posiadać unikalny, deterministyczny identyfikator URN RFC 8141 w przestrzeni `urn:fin:...` (`urn:fin:dossier:...`, `urn:fin:txn:...`, `urn:fin:doc:invoice:...`, `urn:fin:artifact:...`, `urn:fin:email:...`, `urn:fin:source:...`).
 
 ## Optional semantic profile
 
