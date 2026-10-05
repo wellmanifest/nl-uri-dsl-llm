@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/financial-dossier.schema.json",
+  "title": "Financial Dossier Evidence Envelope Schema",
+  "description": "Standard schema for wellmanifest.faktury.dossier/v1 envelopes conforming to nl-uri-dsl-llm NUL-010..013",
+  "type": "object",
+  "required": ["SCHEMA", "MONTH", "AUDIT_SUMMARY", "CASES"],
+  "properties": {
+    "SCHEMA": {
+      "type": "string",
+      "const": "wellmanifest.faktury.dossier/v1"
+    },
+    "MONTH": {
+      "type": "string",
+      "pattern": "^\\d{4}\\.(0[1-9]|1[0-2])$"
+    },
+    "AUDIT_SUMMARY": {
+      "type": "object",
+      "required": ["TOTAL_CASES", "COMPLETION_RATE_PERCENT"],
+      "properties": {
+        "TOTAL_CASES": { "type": "integer", "minimum": 0 },
+        "STATUS_MATCHED_EXACT": { "type": "integer", "minimum": 0 },
+        "STATUS_MATCHED_FX_NBP": { "type": "integer", "minimum": 0 },
+        "STATUS_MATCHED_FEE_SPLIT": { "type": "integer", "minimum": 0 },
+        "STATUS_MATCHED_INTERNAL_TRANSFER": { "type": "integer", "minimum": 0 },
+        "STATUS_PENDING_PORTAL_DOWNLOAD": { "type": "integer", "minimum": 0 },
+        "STATUS_UNMATCHED_BANK_OUTFLOW": { "type": "integer", "minimum": 0 },
+        "STATUS_UNPAID_INVOICE": { "type": "integer", "minimum": 0 },
+        "COMPLETION_RATE_PERCENT": { "type": "number", "minimum": 0, "maximum": 100 }
+      },
+      "additionalProperties": true
+    },
+    "CASES": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DossierCase"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "DossierCase": {
+      "type": "object",
+      "required": ["CASE_ID", "DOSSIER_STATUS", "SOURCE_NODE", "DOCUMENT_NODE", "TRANSACTION_NODE", "CONFIRMATION_NODE", "DISCREPANCY_ANALYSIS"],
+      "properties": {
+        "CASE_ID": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_/-]+$"
+        },
+        "DOSSIER_STATUS": {
+          "type": "string",
+          "enum": [
+            "MATCHED_EXACT",
+            "MATCHED_FX_NBP",
+            "MATCHED_FEE_SPLIT",
+            "MATCHED_INTERNAL_TRANSFER",
+            "PENDING_PORTAL_DOWNLOAD",
+            "UNMATCHED_BANK_OUTFLOW",
+            "UNMATCHED_BANK_INFLOW",
+            "UNPAID_INVOICE",
+            "AMOUNT_DISCREPANCY"
+          ]
+        },
+        "CONFIDENCE_LEVEL": {
+          "type": "string",
+          "enum": ["CONFIDENCE_HIGH", "CONFIDENCE_MEDIUM", "CONFIDENCE_LOW", "CONFIDENCE_NONE"]
+        },
+        "COUNTERPARTY": {
+          "type": "string"
+        },
+        "COST_CATEGORY": {
+          "type": ["string", "null"]
+        },
+        "SOURCE_NODE": {
+          "type": "object",
+          "required": ["CHANNEL"],
+          "properties": {
+            "CHANNEL": {
+              "type": "string",
+              "enum": [
+                "BANK_ACCOUNT_TRADITIONAL",
+                "WALLET_PAYPAL",
+                "GATEWAY_STRIPE",
+                "MULTICURRENCY_REVOLUT",
+                "PAYMENT_GATEWAY_AGGREGATOR",
+                "CORPORATE_CARD",
+                "MARKETPLACE_ALLEGRO",
+                "GOV_KSEF_GATEWAY",
+                "PORTAL_SAAS_VENDOR",
+                "EMAIL_IMAP_STORE",
+                "LOCAL_COST_STORE",
+                "LOCAL_REVENUE_STORE"
+              ]
+            },
+            "PROVIDER_ID": { "type": ["string", "null"] },
+            "PORTAL_URL": { "type": ["string", "null"] },
+            "EMAIL_FOLDER_REF": { "type": ["string", "null"] },
+            "NOTIFICATION_TIMESTAMP": { "type": ["string", "null"] },
+            "EMAIL_SUBJECT": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        },
+        "DOCUMENT_NODE": {
+          "type": "object",
+          "required": ["DOCUMENT_PRESENCE"],
+          "properties": {
+            "DOCUMENT_PRESENCE": {
+              "type": "string",
+              "enum": ["DOCUMENT_PRESENT", "DOCUMENT_NOT_DOWNLOADED", "DOCUMENT_MISSING", "DOCUMENT_REJECTED"]
+            },
+            "INVOICE_NUMBER": { "type": ["string", "null"] },
+            "GROSS_AMOUNT": { "type": ["number", "null"] },
+            "CURRENCY": { "type": ["string", "null"] },
+            "ISSUE_DATE": { "type": ["string", "null"] },
+            "LOCAL_FILE_PATH": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        },
+        "TRANSACTION_NODE": {
+          "type": "object",
+          "required": ["PAYMENT_STATE", "PAYMENT_METHOD"],
+          "properties": {
+            "PAYMENT_STATE": {
+              "type": "string",
+              "enum": ["PAYMENT_SETTLED", "PAYMENT_PENDING", "PAYMENT_MISSING", "PAYMENT_FAILED"]
+            },
+            "SOURCE_ACCOUNT": { "type": ["string", "null"] },
+            "PAYMENT_METHOD": {
+              "type": "string",
+              "enum": [
+                "BANK_TRANSFER_STANDARD",
+                "BANK_TRANSFER_EXPRESS",
+                "CARD_ONLINE_ECOMMERCE",
+                "CARD_TERMINAL_POS",
+                "PAYPAL_EXPRESS_CHECKOUT",
+                "STRIPE_PAYMENT_INTENT",
+                "BLIK_MOBILE_CODE",
+                "DIRECT_DEBIT_SEPA",
+                "ATM_CASH_WITHDRAWAL",
+                "BANK_FEE_COMMISSION",
+                "INTERNAL_TRANSFER",
+                "UNKNOWN_METHOD"
+              ]
+            },
+            "OPERATION_DATE": { "type": ["string", "null"] },
+            "SETTLEMENT_DATE": { "type": ["string", "null"] },
+            "BOOKED_AMOUNT": { "type": ["number", "null"] },
+            "CURRENCY": { "type": ["string", "null"] },
+            "RAW_TITLE": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        },
+        "CONFIRMATION_NODE": {
+          "type": "object",
+          "required": ["CONFIRMATION_TYPE"],
+          "properties": {
+            "CONFIRMATION_TYPE": {
+              "type": "string",
+              "enum": ["BANK_STATEMENT_LINE", "PAYMENT_RECEIPT_PDF", "SMIME_SIGNATURE_P7S", "GATEWAY_EVENT_LOG", "NONE"]
+            },
+            "CONFIRMATION_FILE_REF": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        },
+        "DISCREPANCY_ANALYSIS": {
+          "type": "object",
+          "properties": {
+            "LAG_CALENDAR_DAYS": { "type": "integer" },
+            "LAG_BUSINESS_DAYS": { "type": "integer" },
+            "LAG_REASON": { "type": ["string", "null"] },
+            "AMOUNT_DELTA": { "type": "number" },
+            "LLM_EXPLANATION": { "type": ["string", "null"] },
+            "ACTION_REQUIRED": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

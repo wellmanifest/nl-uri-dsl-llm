@@ -90,6 +90,10 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-007 (Conversational Stream & Process Isolation)`**: W interfejsach czatu i dialogu asystenta, strumień czatu NIE MOŻE być zanieczyszczany surowym wyjściem stdout/stderr procesów CLI/shell. Czat przechowuje wyłącznie konwersację oraz zwięzłe powiadomienie z identyfikatorem URN (`urn:<domain>:proc:<id>`) i URI (`process://<host>/<bin>?<params>`). Wyjście i sterowanie procesem trafia do dedykowanego widoku artefaktów (Terminal).
 - **`NUL-008 (Bidirectional Interactive State URL Synchronization)`**: Interaktywne interfejsy muszą utrzymywać pełną, dwukierunkową synchronizację stanu z parametrami zapytania RFC 3986 w URL (`location.search` via `history.replaceState`), gwarantującą deterministyczne odtworzenie całego stanu widoków, okien, fokusu, palet i zapytań po ponownym otwarciu adresu.
 - **`NUL-009 (Conversational & Process State Introspection Snapshot)`**: System musi udostępniać zrzut stanu w ustrukturyzowanym schemacie JSON (`wellmanifest.conversational-process-snapshot/v1`) obejmujący historię czatu, rejestr procesów i parametry URL na potrzeby audytu i narzędzi agentów AI.
+- **`NUL-010 (Financial DSL Capitalize Token Determinism)`**: Wszystkie statusy spraw (`DOSSIER_STATUS`), typy kanałów (`SOURCE_CHANNEL_TYPE`), metody płatności (`PAYMENT_METHOD`) i zdarzenia logowania (`LOG_EVENT`) w dziedzinie finansów MUSZĄ być zapisywane jako tokeny `SCREAMING_SNAKE_CASE` (DSL CAPITALIZE) w celu zapewnienia deterministycznej kontroli mikroskalowej i eliminacji dryfu semantycznego LLM.
+- **`NUL-011 (Dossier Evidence Envelope RFC 3986 Addressing)`**: Każde zdarzenie gospodarcze, kanał źródłowy i dokument faktury musi być jednoznacznie adresowalne za pomocą Action URI (`faktury://reconcile/...`) oraz Resource URN (`urn:fin:dossier:...`, `urn:fin:source:...`).
+- **`NUL-012 (Internal Transfer vs Tax Event Demarcation)`**: Przepływy między rachunkami własnymi (`MATCHED_INTERNAL_TRANSFER`) pod rygorem błędu walidacji muszą być wyłączane z przychodów i kosztów podatkowych.
+- **`NUL-013 (Payment Gateway Fee Auto-Splitting)`**: Płatności przetwarzane przez bramki (PayPal, Stripe, PayU) z potrącaną prowizją u źródła (`Fee`) muszą być automatycznie rozbijane na kwotę brutto należności oraz odrębny koszt prowizji operacyjnej (`MATCHED_FEE_SPLIT`).
 
 ## Optional semantic profile
 
@@ -107,3 +111,9 @@ Runtime adoption and an observed execution canary are required separately.
 Version 1.2 adds the [Conversational Process Isolation and State URL Synchronization profile](spec/CONVERSATIONAL_PROCESS_ISOLATION.md) (`conversational-process-isolation-v1`).
 Machine-verifiable JSON Schema is defined in [conversational-process-snapshot.schema.json](schemas/conversational-process-snapshot.schema.json).
 This standard enforces strict separation between conversational dialogue and process execution, canonical `process://` and `urn:...` addressing, and deterministic URL state restoration proven in practice in `willmux`.
+
+## Financial transactions and invoice taxonomy profile
+
+Version 1.3 adds the [Financial Transactions and Invoice Taxonomy DSL profile](spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md) (`financial-dsl-v1`).
+Machine-verifiable JSON Schemas are defined in [financial-dossier.schema.json](schemas/financial-dossier.schema.json) (`wellmanifest.faktury.dossier/v1`) and [financial-source.schema.json](schemas/financial-source.schema.json) (`wellmanifest.faktury.source/v1`).
+This standard governs multi-source financial ingestion (`bank-*`, `paypal-*`, `stripe-*`, `allegro-*`, `ksef-*`, `www-*`), 5-node dossier envelopes, weekend lag tolerances, and automated gateway fee splitting.

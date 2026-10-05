@@ -1,3 +1,10 @@
+# 1.3.0 — 2026-10-05
+
+- Add the Financial Transactions and Invoice Taxonomy DSL profile (`spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md`).
+- Add normative rules `NUL-010` (Financial DSL Capitalize Token Determinism), `NUL-011` (Dossier Evidence Envelope RFC 3986 Addressing), `NUL-012` (Internal Transfer vs Tax Event Demarcation), and `NUL-013` (Payment Gateway Fee Auto-Splitting).
+- Add machine-verifiable JSON Schemas `schemas/financial-dossier.schema.json` (`wellmanifest.faktury.dossier/v1`) and `schemas/financial-source.schema.json` (`wellmanifest.faktury.source/v1`).
+- Add automated conformance tests (`tests/test_financial_dsl.py`).
+
 # 1.2.0 — 2026-10-04
 
 - Add the Conversational Process Isolation and Bidirectional State URL Synchronization standard (`spec/CONVERSATIONAL_PROCESS_ISOLATION.md`).
