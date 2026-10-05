@@ -1,0 +1,75 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-004",
+  "summary": "standardize python package dependencies and metadata",
+  "workstream": "integration",
+  "classification": {
+    "kind": "SERVICE",
+    "priority": "P2",
+    "origin": "health"
+  },
+  "allowedPaths": [
+    "project/ticket-004/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    "pyproject.toml"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null,
+  "delivery": {
+    "acceptedBaseSha": "22b9fef958aab202e63a29bbb3f05dfd3b3457ab",
+    "targetBranch": "main",
+    "outcome": "Standardize python package metadata, dependencies (pydantic, jsonschema), and parent standard adoption of wellmanifest/nl-dsl-llm@0.1.0 in pyproject.toml.",
+    "nonGoals": [
+      "No breaking changes to schemas or specifications."
+    ],
+    "complexity": "M",
+    "estimatedMinutes": 30,
+    "budgets": {
+      "maxImplementationFiles": 3,
+      "maxAffectedComponents": 1,
+      "maxPublicInterfaceChanges": 0,
+      "maxRuntimeDependencies": 2
+    },
+    "architecture": {
+      "status": "accepted",
+      "decision": "Define pyproject.toml adhering to the hatchling build backend, Python >=3.11, standard dependencies (pydantic, jsonschema), and formal standard adoption of wellmanifest/nl-dsl-llm@0.1.0 under tool.wellmanifest.",
+      "components": [
+        {
+          "name": "packaging",
+          "paths": [
+            "pyproject.toml"
+          ]
+        }
+      ],
+      "responsibilityChanges": false,
+      "interfaceChanges": [],
+      "dataChanges": [],
+      "ui": {
+        "impact": "none",
+        "states": [],
+        "evidence": []
+      },
+      "rollback": "Revert the commit on ticket branch."
+    },
+    "runtimeDependencies": [
+      "pydantic",
+      "jsonschema"
+    ],
+    "validation": [
+      {
+        "criterion": "AC-01",
+        "commands": [
+          "python3 -m pytest tests/",
+          "./project/governance-check.sh"
+        ],
+        "evidence": "Pyproject package metadata validates and pytest passes with governance check."
+      }
+    ]
+  }
+}
