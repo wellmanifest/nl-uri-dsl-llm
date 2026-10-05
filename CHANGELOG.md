@@ -1,3 +1,9 @@
+# 1.3.1 — 2026-10-05
+
+- Add normative rule `NUL-014` (Universal URN Identifier Mandate for Financial Entities) to `spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md`.
+- Enforce mandatory RFC 8141 URN properties (`CASE_URN`, `SOURCE_URN`, `DOCUMENT_URN`, `TRANSACTION_URN`, `CONFIRMATION_URN`, `FILE_URN`) across `schemas/financial-dossier.schema.json` and `schemas/financial-source.schema.json`.
+- Add automated URN syntax and schema conformance tests (`tests/test_financial_dsl.py`).
+
 # 1.3.0 — 2026-10-05
 
 - Add the Financial Transactions and Invoice Taxonomy DSL profile (`spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md`).

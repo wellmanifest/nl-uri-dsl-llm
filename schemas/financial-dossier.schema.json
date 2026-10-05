@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellmanifest.com/schemas/financial-dossier.schema.json",
   "title": "Financial Dossier Evidence Envelope Schema",
-  "description": "Standard schema for wellmanifest.faktury.dossier/v1 envelopes conforming to nl-uri-dsl-llm NUL-010..013",
+  "description": "Standard schema for wellmanifest.faktury.dossier/v1 envelopes conforming to nl-uri-dsl-llm NUL-010..014",
   "type": "object",
   "required": ["SCHEMA", "MONTH", "AUDIT_SUMMARY", "CASES"],
   "properties": {
@@ -41,11 +41,15 @@
   "$defs": {
     "DossierCase": {
       "type": "object",
-      "required": ["CASE_ID", "DOSSIER_STATUS", "SOURCE_NODE", "DOCUMENT_NODE", "TRANSACTION_NODE", "CONFIRMATION_NODE", "DISCREPANCY_ANALYSIS"],
+      "required": ["CASE_ID", "CASE_URN", "DOSSIER_STATUS", "SOURCE_NODE", "DOCUMENT_NODE", "TRANSACTION_NODE", "CONFIRMATION_NODE", "DISCREPANCY_ANALYSIS"],
       "properties": {
         "CASE_ID": {
           "type": "string",
           "pattern": "^[A-Z0-9_/-]+$"
+        },
+        "CASE_URN": {
+          "type": "string",
+          "pattern": "^urn:fin:dossier:\\d{4}\\.(0[1-9]|1[0-2]):[A-Za-z0-9_/-]+$"
         },
         "DOSSIER_STATUS": {
           "type": "string",
@@ -73,7 +77,7 @@
         },
         "SOURCE_NODE": {
           "type": "object",
-          "required": ["CHANNEL"],
+          "required": ["CHANNEL", "SOURCE_URN"],
           "properties": {
             "CHANNEL": {
               "type": "string",
@@ -92,6 +96,14 @@
                 "LOCAL_REVENUE_STORE"
               ]
             },
+            "SOURCE_URN": {
+              "type": "string",
+              "pattern": "^urn:fin:source:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*$"
+            },
+            "EMAIL_URN": {
+              "type": ["string", "null"],
+              "pattern": "^(urn:fin:email:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*)?$"
+            },
             "PROVIDER_ID": { "type": ["string", "null"] },
             "PORTAL_URL": { "type": ["string", "null"] },
             "EMAIL_FOLDER_REF": { "type": ["string", "null"] },
@@ -108,6 +120,10 @@
               "type": "string",
               "enum": ["DOCUMENT_PRESENT", "DOCUMENT_NOT_DOWNLOADED", "DOCUMENT_MISSING", "DOCUMENT_REJECTED"]
             },
+            "DOCUMENT_URN": {
+              "type": ["string", "null"],
+              "pattern": "^(urn:fin:doc:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*)?$"
+            },
             "INVOICE_NUMBER": { "type": ["string", "null"] },
             "GROSS_AMOUNT": { "type": ["number", "null"] },
             "CURRENCY": { "type": ["string", "null"] },
@@ -123,6 +139,10 @@
             "PAYMENT_STATE": {
               "type": "string",
               "enum": ["PAYMENT_SETTLED", "PAYMENT_PENDING", "PAYMENT_MISSING", "PAYMENT_FAILED"]
+            },
+            "TRANSACTION_URN": {
+              "type": ["string", "null"],
+              "pattern": "^(urn:fin:txn:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*)?$"
             },
             "SOURCE_ACCOUNT": { "type": ["string", "null"] },
             "PAYMENT_METHOD": {
@@ -157,6 +177,10 @@
             "CONFIRMATION_TYPE": {
               "type": "string",
               "enum": ["BANK_STATEMENT_LINE", "PAYMENT_RECEIPT_PDF", "SMIME_SIGNATURE_P7S", "GATEWAY_EVENT_LOG", "NONE"]
+            },
+            "CONFIRMATION_URN": {
+              "type": ["string", "null"],
+              "pattern": "^(urn:fin:artifact:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*)?$"
             },
             "CONFIRMATION_FILE_REF": { "type": ["string", "null"] }
           },

@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellmanifest.com/schemas/financial-source.schema.json",
   "title": "Financial Source Manifest Schema",
-  "description": "Standard schema for wellmanifest.faktury.source/v1 channel manifests conforming to nl-uri-dsl-llm NUL-010..013",
+  "description": "Standard schema for wellmanifest.faktury.source/v1 channel manifests conforming to nl-uri-dsl-llm NUL-010..014",
   "type": "object",
-  "required": ["SCHEMA", "SOURCE_ID", "SOURCE_CHANNEL_TYPE", "CATEGORY", "NAME", "MONTH", "BASE_CURRENCY"],
+  "required": ["SCHEMA", "SOURCE_ID", "SOURCE_URN", "SOURCE_CHANNEL_TYPE", "CATEGORY", "NAME", "MONTH", "BASE_CURRENCY"],
   "properties": {
     "SCHEMA": {
       "type": "string",
@@ -13,6 +13,10 @@
     "SOURCE_ID": {
       "type": "string",
       "pattern": "^[a-z0-9_-]+$"
+    },
+    "SOURCE_URN": {
+      "type": "string",
+      "pattern": "^urn:fin:source:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*$"
     },
     "SOURCE_CHANNEL_TYPE": {
       "type": "string",
@@ -54,9 +58,13 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["FILE_NAME", "FILE_FORMAT"],
+        "required": ["FILE_NAME", "FILE_URN", "FILE_FORMAT"],
         "properties": {
           "FILE_NAME": { "type": "string" },
+          "FILE_URN": {
+            "type": "string",
+            "pattern": "^urn:fin:artifact:[a-z0-9_/-]+(:[a-zA-Z0-9_./@-]+)*$"
+          },
           "FILE_FORMAT": { "type": "string" },
           "TRANSACTIONS_COUNT": { "type": "integer" },
           "TOTAL_INFLOW": { "type": "number" },

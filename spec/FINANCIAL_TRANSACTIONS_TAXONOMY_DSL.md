@@ -39,6 +39,19 @@ Wpływy i wypływy realizowane za pośrednictwem procesorów płatności (PayPal
 2. Odrębny koszt prowizji operacyjnej (`FEE_AMOUNT` zakwalifikowany do `BANK_FEE_COMMISSION`).
 Status teczki w takim przypadku przyjmuje wartość `MATCHED_FEE_SPLIT`.
 
+### NUL-014 (Universal URN Identifier Mandate for Financial Entities)
+Każdy artefakt dowodowy, transakcja finansowa, wiadomość e-mail, dokument faktury oraz teczka sprawy **MUSZĄ** posiadać unikalny, deterministyczny identyfikator URN zgodny z RFC 8141 w przestrzeni `urn:fin:...`:
+- **Teczka sprawy**: `urn:fin:dossier:[YYYY.MM]:[CASE_ID]`
+- **Transakcja bankowa / portfelowa**: `urn:fin:txn:[CHANNEL]:[ACCOUNT_ID]:[TXN_ID_OR_HASH]`
+- **Dokument faktury**: `urn:fin:doc:invoice:[INVOICE_NUMBER_OR_HASH]`
+- **Artefakt plikowy**: `urn:fin:artifact:[TYPE]:[RELATIVE_PATH_OR_HASH]`
+- **Wiadomość e-mail**: `urn:fin:email:msg:[EMAIL_FOLDER_OR_MSG_ID]`
+- **Załącznik e-mail**: `urn:fin:email:attachment:[EMAIL_FOLDER]:[FILENAME]`
+- **Konto / Kanał źródłowy**: `urn:fin:source:[CHANNEL_TYPE]:[SOURCE_ID]`
+- **Powiadomienie portalu**: `urn:fin:source:notification:[PROVIDER_ID]:[REF_NUMBER]`
+
+Zabrania się referencjonowania obiektów finansowych za pomocą samych ścieżek relatywnych bez towarzyszącego, stabilnego identyfikatora URN.
+
 ---
 
 ## 3. Zunifikowana Taksonomia Kanałów Źródłowych
