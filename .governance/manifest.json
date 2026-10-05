@@ -85,7 +85,11 @@
           ".github/workflows/semantic-profile.yml",
           "VERSION",
           ".gitattributes",
-          ".github/workflows/new-project-branch-hygiene.yml"
+          ".github/workflows/new-project-branch-hygiene.yml",
+          "spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md",
+          "schemas/financial-dossier.schema.json",
+          "schemas/financial-source.schema.json",
+          "tests/test_financial_dsl.py"
         ]
       },
       "infrastructure": {
