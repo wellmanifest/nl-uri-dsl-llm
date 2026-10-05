@@ -9,4 +9,5 @@
 | **ticket-004** | [`README.md`](./ticket-004/README.md) | - | - | - | - | - |
 | **ticket-005** | [`README.md`](./ticket-005/README.md) | - | - | - | - | - |
 | **ticket-006** | [`README.md`](./ticket-006/README.md) | - | - | - | - | - |
+| **ticket-007** | [`README.md`](./ticket-007/README.md) | - | - |  [`ai-antigravity.md`](./ticket-007/ai-antigravity.md) | - | - |
 <!-- AUTO:TICKET_INDEX:END -->
