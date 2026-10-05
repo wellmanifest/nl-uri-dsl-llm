@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wellmanifest-nl-uri-dsl-llm"
+version = "0.1.0"
+description = "Normative specification and schemas for Natural Language to Action URI/Resource URN (DSL) and Conversational Process Isolation"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0.0",
+    "jsonschema>=4.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+]
+
+[tool.wellmanifest]
+standard = "0.20.65"
+revision = "30ada2d6f171ee11d029a07ea55d1993c25c7fe0"
+gate = "project/governance-check.sh"
+adopts = [
+    "wellmanifest/nl-dsl-llm@0.1.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "-p wellmanifest_governance"
+testpaths = ["tests"]
