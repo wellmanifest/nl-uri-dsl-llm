@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/fleet-execution-receipt.schema.json",
+  "title": "FleetExecutionReceipt",
+  "description": "Standard schema for multi-repository fleet batch execution receipts conforming to NUL-016",
+  "type": "object",
+  "required": [
+    "schema",
+    "root",
+    "total_repositories",
+    "modified_repositories",
+    "failed_repositories",
+    "dry_run",
+    "script",
+    "results"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "diagit.fleet_execution/v1"
+    },
+    "root": {
+      "type": "string",
+      "description": "Absolute root path of the fleet checkouts"
+    },
+    "total_repositories": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total count of repositories matched and traversed"
+    },
+    "modified_repositories": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count of repositories where changes occurred"
+    },
+    "failed_repositories": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count of repositories where execution returned non-zero exit code"
+    },
+    "dry_run": {
+      "type": "boolean",
+      "description": "True when execution was simulated without persistent commits or push"
+    },
+    "script": {
+      "type": "string",
+      "description": "Executed script or shell command string"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Unique UUID or execution identifier"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 execution timestamp"
+    },
+    "results": {
+      "type": "array",
+      "description": "Individual outcome per repository",
+      "items": {
+        "type": "object",
+        "required": [
+          "repository",
+          "path",
+          "exit_code",
+          "modified"
+        ],
+        "properties": {
+          "repository": {
+            "type": "string",
+            "description": "Canonical owner/name repository identifier"
+          },
+          "path": {
+            "type": "string",
+            "description": "Absolute filesystem path to the repository root"
+          },
+          "exit_code": {
+            "type": "integer",
+            "description": "Process exit code (0 for success)"
+          },
+          "modified": {
+            "type": "boolean",
+            "description": "True if repository files were modified"
+          },
+          "committed": {
+            "type": "boolean",
+            "description": "True if changes were committed to Git"
+          },
+          "branch": {
+            "type": ["string", "null"],
+            "description": "Target Git branch created or checked out"
+          },
+          "stdout": {
+            "type": "string",
+            "description": "Captured standard output (truncated or full)"
+          },
+          "stderr": {
+            "type": "string",
+            "description": "Captured standard error (truncated or full)"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

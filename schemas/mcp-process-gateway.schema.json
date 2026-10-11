@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/mcp-process-gateway.schema.json",
+  "title": "McpProcessGatewayEnvelope",
+  "description": "Standard schema for Model Context Protocol (MCP) Process URI tool bindings and receipts conforming to NUL-015 and NUL-018",
+  "type": "object",
+  "required": [
+    "schema",
+    "mcp_method",
+    "tool_name",
+    "process_uri",
+    "arguments",
+    "receipt"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "wellmanifest.mcp-process-gateway/v1"
+    },
+    "mcp_method": {
+      "type": "string",
+      "enum": ["tools/call", "tools/list"]
+    },
+    "tool_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.-]+$"
+    },
+    "process_uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "Target canonical RFC 3986 Action URI"
+    },
+    "arguments": {
+      "type": "object",
+      "description": "Validated parameters payload conforming to tool inputSchema"
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["urn", "status"],
+      "properties": {
+        "urn": {
+          "type": "string",
+          "pattern": "^urn:[A-Za-z0-9_.-]+:[A-Za-z0-9_.:-]+$",
+          "description": "RFC 8141 canonical resource URN"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["succeeded", "failed", "blocked"]
+        },
+        "summary": {
+          "type": "string",
+          "description": "Concise conversational summary; no raw stream output"
+        },
+        "artifact_uris": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Links or paths to detailed terminal logs and output artifacts"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "cost_attribution": {
+      "type": "object",
+      "required": ["app_name", "app_url"],
+      "properties": {
+        "app_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Application identity mapped to X-OpenRouter-Title"
+        },
+        "app_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Application origin mapped to HTTP-Referer"
+        },
+        "model": {
+          "type": "string",
+          "description": "Selected model identifier"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

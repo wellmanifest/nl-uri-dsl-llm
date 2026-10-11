@@ -95,6 +95,10 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-012 (Internal Transfer vs Tax Event Demarcation)`**: Przepływy między rachunkami własnymi (`MATCHED_INTERNAL_TRANSFER`) pod rygorem błędu walidacji muszą być wyłączane z przychodów i kosztów podatkowych.
 - **`NUL-013 (Payment Gateway Fee Auto-Splitting)`**: Płatności przetwarzane przez bramki (PayPal, Stripe, PayU) z potrącaną prowizją u źródła (`Fee`) muszą być automatycznie rozbijane na kwotę brutto należności oraz odrębny koszt prowizji operacyjnej (`MATCHED_FEE_SPLIT`).
 - **`NUL-014 (Universal URN Identifier Mandate for Financial Entities)`**: Każdy artefakt dowodowy, transakcja finansowa, wiadomość e-mail, dokument faktury oraz teczka sprawy MUSZĄ posiadać unikalny, deterministyczny identyfikator URN RFC 8141 w przestrzeni `urn:fin:...` (`urn:fin:dossier:...`, `urn:fin:txn:...`, `urn:fin:doc:invoice:...`, `urn:fin:artifact:...`, `urn:fin:email:...`, `urn:fin:source:...`).
+- **`NUL-015 (Model Context Protocol Process Gateway Conformance)`**: Wszelkie narzędzia LLM udostępniane przez protokół MCP muszą eksponować zwalidowany JSON Schema (inputSchema), mapować wywołania na kanoniczne RFC 3986 Action URI i zwracać ustrukturyzowany kwit URN z zachowaniem izolacji strumienia czatu (NUL-007).
+- **`NUL-016 (Fleet Multi-Repository Batch Dry-Run and Execution Receipt Mandate)`**: Operacje zbiorcze na wielu repozytoriach jednocześnie (np. `multi-gitter`, `diagit://fleet/...`) muszą wspierać obowiązkowy tryb symulacji `--dry-run` oraz emitować kwit wykonawczy zgodny ze schematem `wellmanifest.fleet-execution-receipt/v1`.
+- **`NUL-017 (Fleet Dependency Health & Impact Classification Mandate)`**: Narzędzia audytu zależności floty (`search://fleet/dependencies/outdated`) muszą kategoryzować aktualizacje według ryzyka (`major`, `minor`, `patch`) oraz zapewniać odporność na brak sieci poprzez lokalną pamięć podręczną (TTL cache) i tryb `--offline`.
+- **`NUL-018 (LLM Cost Attribution and Application Identity Mandate)`**: Wszelkie wywołania API zewnętrznych dostawców modeli LLM (np. OpenRouter) muszą deklarować tożsamość aplikacji (`OPENROUTER_APP_NAME`, `OPENROUTER_APP_URL`) zbindowaną z nagłówkami `HTTP-Referer` i `X-OpenRouter-Title`.
 
 ## Optional semantic profile
 
@@ -118,3 +122,9 @@ This standard enforces strict separation between conversational dialogue and pro
 Version 1.3 adds the [Financial Transactions and Invoice Taxonomy DSL profile](spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md) (`financial-dsl-v1`).
 Machine-verifiable JSON Schemas are defined in [financial-dossier.schema.json](schemas/financial-dossier.schema.json) (`wellmanifest.faktury.dossier/v1`) and [financial-source.schema.json](schemas/financial-source.schema.json) (`wellmanifest.faktury.source/v1`).
 This standard governs multi-source financial ingestion (`bank-*`, `paypal-*`, `stripe-*`, `allegro-*`, `ksef-*`, `www-*`), 5-node dossier envelopes, weekend lag tolerances, and automated gateway fee splitting.
+
+## MCP process gateway, fleet batch execution, and LLM cost attribution profile
+
+Version 1.4 adds the [MCP Process Gateway, Fleet Batch Execution, and LLM Cost Attribution profile](spec/MCP_FLEET_EXECUTION_DSL.md) (`mcp-fleet-dsl-v1`).
+Machine-verifiable JSON Schemas are defined in [mcp-process-gateway.schema.json](schemas/mcp-process-gateway.schema.json) (`wellmanifest.mcp-process-gateway/v1`) and [fleet-execution-receipt.schema.json](schemas/fleet-execution-receipt.schema.json) (`wellmanifest.fleet-execution-receipt/v1`).
+This standard governs Model Context Protocol tool routing to RFC 3986 Action URIs, anti-hallucination schema constraints, multi-repository fleet automation with mandatory `--dry-run` and receipt envelopes, semver bump impact classification, and required LLM application cost attribution.

@@ -1,3 +1,10 @@
+# 1.4.0 — 2026-10-11
+
+- Add the MCP Process Gateway, Fleet Batch Execution, and LLM Cost Attribution profile (`spec/MCP_FLEET_EXECUTION_DSL.md`, `mcp-fleet-dsl-v1`).
+- Add normative rules `NUL-015` (Model Context Protocol Process Gateway Conformance), `NUL-016` (Fleet Multi-Repository Batch Dry-Run and Execution Receipt Mandate), `NUL-017` (Fleet Dependency Health & Impact Classification Mandate), and `NUL-018` (LLM Cost Attribution and Application Identity Mandate).
+- Add machine-verifiable JSON Schemas `schemas/mcp-process-gateway.schema.json` (`wellmanifest.mcp-process-gateway/v1`) and `schemas/fleet-execution-receipt.schema.json` (`wellmanifest.fleet-execution-receipt/v1`).
+- Add automated conformance and validation tests (`tests/test_mcp_fleet_dsl.py`).
+
 # 1.3.1 — 2026-10-05
 
 - Add normative rule `NUL-014` (Universal URN Identifier Mandate for Financial Entities) to `spec/FINANCIAL_TRANSACTIONS_TAXONOMY_DSL.md`.
