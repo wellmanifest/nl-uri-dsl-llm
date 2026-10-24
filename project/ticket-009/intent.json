@@ -1,0 +1,30 @@
+{
+  "schema": "new-project.intent/v3",
+  "ticket": "ticket-009",
+  "summary": "Standardize System One Jev-compatible typed decision DSL and model profiles",
+  "workstream": "governance",
+  "classification": {
+    "kind": "FEATURE",
+    "priority": "P2",
+    "origin": "requested"
+  },
+  "allowedPaths": [
+    "project/ticket-009/**",
+    "TODO.md",
+    "project/TICKETS.md",
+    ".governance/manifest.json",
+    "CHANGELOG.md",
+    "README.md",
+    "VERSION",
+    "spec/SYSTEM_ONE_DECISION_DSL.md",
+    "schemas/system-one-decision.schema.json",
+    "tests/test_system_one_decision_dsl.py"
+  ],
+  "forbiddenPaths": [
+    "project/ticket-*/user-*.md"
+  ],
+  "stacks": [],
+  "dependsOn": [],
+  "conflictsWith": [],
+  "integrationTicket": null
+}

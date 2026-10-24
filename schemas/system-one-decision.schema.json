@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/system-one-decision.schema.json",
+  "title": "Wellmanifest System One / Jev-Compatible Typed Decision Envelope",
+  "description": "Validates single-pass System One / Jev typed decision requests and responses (choice, score, noul) over DockURI and Action URI candidates with policy-dsl cross-question constraints (NUL-019..022).",
+  "type": "object",
+  "required": [
+    "schema",
+    "model_profile_id",
+    "family",
+    "wire_format",
+    "state",
+    "questions",
+    "answers",
+    "probabilities",
+    "selected_uri",
+    "confidence",
+    "risk_score",
+    "execution_allowed",
+    "blocked_by_constraint",
+    "applied_constraints"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "actionUri": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:[?][A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    }
+  },
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "wellmanifest.system-one-decision/v1"
+    },
+    "model_profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "clef",
+        "gliner2.5-decide",
+        "laya",
+        "kev",
+        "laya-mlx",
+        "semif",
+        "nanojev",
+        "bespoke-nimble",
+        "jevlike",
+        "jevos"
+      ]
+    },
+    "wire_format": {
+      "type": "string",
+      "enum": [
+        "jev-system-one",
+        "gliner2-schema",
+        "system-one",
+        "typesafe-system-one",
+        "logit-scoring",
+        "token-score",
+        "candidate-scorer",
+        "typesafe-jev"
+      ]
+    },
+    "state": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string", "minLength": 1 },
+        "autonomy_mode": {
+          "type": "string",
+          "enum": ["suggest", "confirm", "auto", "full"]
+        },
+        "modality": {
+          "type": "string",
+          "enum": ["text", "json", "image", "video", "multimodal"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "uri_choice" },
+            "type": { "const": "choice" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 255,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/actionUri" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "risk_score" },
+            "type": { "const": "score" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "prefixItems": [
+                { "const": "1" },
+                { "const": "2" },
+                { "const": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "execution_allowed" },
+            "type": { "const": "noul" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "prefixItems": [
+                { "const": "true" },
+                { "const": "false" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "answers": {
+      "type": "object",
+      "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "additionalProperties": false,
+      "properties": {
+        "uri_choice": { "$ref": "#/$defs/actionUri" },
+        "risk_score": {
+          "type": "integer",
+          "enum": [1, 2, 3]
+        },
+        "execution_allowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "probabilities": {
+      "type": "object",
+      "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "additionalProperties": false,
+      "properties": {
+        "uri_choice": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 255,
+          "propertyNames": { "$ref": "#/$defs/actionUri" },
+          "additionalProperties": { "$ref": "#/$defs/probability" }
+        },
+        "risk_score": {
+          "type": "object",
+          "required": ["1", "2", "3"],
+          "additionalProperties": false,
+          "properties": {
+            "1": { "$ref": "#/$defs/probability" },
+            "2": { "$ref": "#/$defs/probability" },
+            "3": { "$ref": "#/$defs/probability" }
+          }
+        },
+        "execution_allowed": {
+          "type": "object",
+          "required": ["true", "false"],
+          "additionalProperties": false,
+          "properties": {
+            "true": { "$ref": "#/$defs/probability" },
+            "false": { "$ref": "#/$defs/probability" }
+          }
+        }
+      }
+    },
+    "selected_uri": { "$ref": "#/$defs/actionUri" },
+    "selected_action_id": {
+      "type": "string"
+    },
+    "confidence": { "$ref": "#/$defs/probability" },
+    "risk_score": {
+      "type": "integer",
+      "enum": [1, 2, 3]
+    },
+    "execution_allowed": {
+      "type": "boolean"
+    },
+    "blocked_by_constraint": {
+      "type": "boolean"
+    },
+    "applied_constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "latency_ms": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "transport": {
+      "type": "string",
+      "enum": ["local-zero-gen", "http-system-one", "workers-ai", "mlx-local", "openvino-local"]
+    }
+  }
+}

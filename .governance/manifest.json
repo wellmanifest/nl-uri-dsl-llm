@@ -93,7 +93,10 @@
           "spec/MCP_FLEET_EXECUTION_DSL.md",
           "schemas/mcp-process-gateway.schema.json",
           "schemas/fleet-execution-receipt.schema.json",
-          "tests/test_mcp_fleet_dsl.py"
+          "tests/test_mcp_fleet_dsl.py",
+          "spec/SYSTEM_ONE_DECISION_DSL.md",
+          "schemas/system-one-decision.schema.json",
+          "tests/test_system_one_decision_dsl.py"
         ]
       },
       "infrastructure": {

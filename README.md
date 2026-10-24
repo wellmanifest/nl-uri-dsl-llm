@@ -99,6 +99,10 @@ Wygenerowany i zwalidowany Process URI trafia do kapsuły wykonawczej standardu 
 - **`NUL-016 (Fleet Multi-Repository Batch Dry-Run and Execution Receipt Mandate)`**: Operacje zbiorcze na wielu repozytoriach jednocześnie (np. `multi-gitter`, `diagit://fleet/...`) muszą wspierać obowiązkowy tryb symulacji `--dry-run` oraz emitować kwit wykonawczy zgodny ze schematem `wellmanifest.fleet-execution-receipt/v1`.
 - **`NUL-017 (Fleet Dependency Health & Impact Classification Mandate)`**: Narzędzia audytu zależności floty (`search://fleet/dependencies/outdated`) muszą kategoryzować aktualizacje według ryzyka (`major`, `minor`, `patch`) oraz zapewniać odporność na brak sieci poprzez lokalną pamięć podręczną (TTL cache) i tryb `--offline`.
 - **`NUL-018 (LLM Cost Attribution and Application Identity Mandate)`**: Wszelkie wywołania API zewnętrznych dostawców modeli LLM (np. OpenRouter) muszą deklarować tożsamość aplikacji (`OPENROUTER_APP_NAME`, `OPENROUTER_APP_URL`) zbindowaną z nagłówkami `HTTP-Referer` i `X-OpenRouter-Title`.
+- **`NUL-019 (Single-Pass Typed URI Decision Without Free-Form Generation)`**: Silniki decyzyjne tłumaczące zapytania NL i stan aplikacji na wywołania procesów DockURI (`proc://`, `dockuri://`) i Action URI muszą oceniać typowane pytania (`choice` dla 2..255 kandydatów, `score` dla ryzyka, `noul` dla bramki bezpieczeństwa i negacji) w jednym przebiegu ze znormalizowanym rozkładem prawdopodobieństwa bez generowania swobodnego tekstu.
+- **`NUL-020 (Cross-Question Policy-DSL Constraint Enforcement)`**: Odpowiedzi wieloheadowe System One muszą podlegać deterministycznym więzom międzypolowym `wellmanifest/policy-dsl` (`CrossQuestionConstraint`), blokującym wykonanie przy negacji (`noul=false`) lub przekroczeniu progu ryzyka dla aktywnego trybu autonomii (`suggest` / `confirm`).
+- **`NUL-021 (SSOT Catalog of 10 Open-Source Jev / System One Model Families)`**: Każda implementacja routera System One musi utrzymywać rejestr SSOT (`wellmanifest/ssot`) 10 rodzin modeli otwartych (`clef`, `gliner2.5-decide`, `laya`, `kev`, `laya-mlx`, `semif`, `nanojev`, `bespoke-nimble`, `jevlike`, `jevos`).
+- **`NUL-022 (Dynamic Telemetry and Language-Aware Model Profile Routing)`**: Wybór modelu decyzyjnego nie może być zahardkodowany (`wellmanifest/nohardcode`) — router musi dobierać profil dynamicznie na podstawie telemetrii sprzętowej (CPU/CUDA/Apple Silicon MLX/OpenVINO), modalności (`text`/`image`/`video`), języka (`pl`/`en`/`multilingual`) oraz liczby kandydatów URI.
 
 ## Optional semantic profile
 
@@ -128,3 +132,9 @@ This standard governs multi-source financial ingestion (`bank-*`, `paypal-*`, `s
 Version 1.4 adds the [MCP Process Gateway, Fleet Batch Execution, and LLM Cost Attribution profile](spec/MCP_FLEET_EXECUTION_DSL.md) (`mcp-fleet-dsl-v1`).
 Machine-verifiable JSON Schemas are defined in [mcp-process-gateway.schema.json](schemas/mcp-process-gateway.schema.json) (`wellmanifest.mcp-process-gateway/v1`) and [fleet-execution-receipt.schema.json](schemas/fleet-execution-receipt.schema.json) (`wellmanifest.fleet-execution-receipt/v1`).
 This standard governs Model Context Protocol tool routing to RFC 3986 Action URIs, anti-hallucination schema constraints, multi-repository fleet automation with mandatory `--dry-run` and receipt envelopes, semver bump impact classification, and required LLM application cost attribution.
+
+## System One / Jev-compatible typed decision DSL and model profiles
+
+Version 1.5 adds the [System One / Jev-Compatible Typed Decision DSL and Model Profiles](spec/SYSTEM_ONE_DECISION_DSL.md) (`system-one-decision-v1`).
+Machine-verifiable JSON Schema is defined in [system-one-decision.schema.json](schemas/system-one-decision.schema.json) (`wellmanifest.system-one-decision/v1`).
+This standard governs single-pass typed decisions (`choice` over 2..255 DockURI / Action URI candidates, `score`, `noul`), cross-question `policy-dsl` constraints, and dynamic routing across the 10 open-source Jev / System One model families (`Clef`/`Clef-flash`, `GLiNER2.5-Decide`, `Laya`, `Kev`, `Laya-MLX`, `SemIf`, `NanoJev`, `Bespoke Nimble`, `jevlike`, `jevos`).
