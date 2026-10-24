@@ -114,3 +114,27 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
     invalid_uri = dict(valid_decision, selected_uri="not_a_valid_uri")
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(instance=invalid_uri, schema=schema)
+
+    # Reject empty probability distribution (NUL-019)
+    empty_probs = dict(
+        valid_decision,
+        probabilities={
+            "uri_choice": {},
+            "risk_score": {"1": 0.87, "2": 0.11, "3": 0.02},
+            "execution_allowed": {"true": 0.95, "false": 0.05},
+        },
+    )
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(instance=empty_probs, schema=schema)
+
+    # Reject incomplete execution_allowed distribution missing 'false'
+    incomplete_noul = dict(
+        valid_decision,
+        probabilities={
+            "uri_choice": valid_decision["probabilities"]["uri_choice"],
+            "risk_score": {"1": 0.87, "2": 0.11, "3": 0.02},
+            "execution_allowed": {"true": 1.0},
+        },
+    )
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(instance=incomplete_noul, schema=schema)
