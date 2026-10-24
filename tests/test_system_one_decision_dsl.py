@@ -128,10 +128,16 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(instance=invalid_family, schema=schema)
 
-    # Reject non-RFC-3986 selected_uri
-    invalid_uri = dict(valid_decision, selected_uri="not_a_valid_uri")
-    with pytest.raises(jsonschema.ValidationError):
-        jsonschema.validate(instance=invalid_uri, schema=schema)
+    # Reject non-RFC-3986 or malformed Action URIs (spaces, empty path segments, uppercase scheme)
+    for bad_uri in (
+        "not_a_valid_uri",
+        "proc://heyasa/test with spaces",
+        "proc:///missing-authority",
+        "proc://heyasa//double-slash",
+        "PROC://heyasa/uppercase-scheme",
+    ):
+        with pytest.raises(jsonschema.ValidationError):
+            jsonschema.validate(instance=dict(valid_decision, selected_uri=bad_uri), schema=schema)
 
     # Reject empty probability distribution (NUL-019)
     empty_probs = dict(

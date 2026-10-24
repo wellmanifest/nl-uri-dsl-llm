@@ -110,7 +110,7 @@
                   "uniqueItems": true,
                   "items": {
                     "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+                    "pattern": "^[a-z][a-z0-9+.-]*://[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?:\\?[A-Za-z0-9_.,=&%+-]+)?$"
                   }
                 }
               }
@@ -163,7 +163,7 @@
       "properties": {
         "uri_choice": {
           "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+          "pattern": "^[a-z][a-z0-9+.-]*://[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?:\\?[A-Za-z0-9_.,=&%+-]+)?$"
         },
         "risk_score": {
           "type": "integer",
@@ -184,7 +184,7 @@
           "minProperties": 2,
           "maxProperties": 255,
           "propertyNames": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+            "pattern": "^[a-z][a-z0-9+.-]*://[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?:\\?[A-Za-z0-9_.,=&%+-]+)?$"
           },
           "additionalProperties": {
             "type": "number",
@@ -244,7 +244,7 @@
     },
     "selected_uri": {
       "type": "string",
-      "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+      "pattern": "^[a-z][a-z0-9+.-]*://[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?:\\?[A-Za-z0-9_.,=&%+-]+)?$"
     },
     "selected_action_id": {
       "type": "string"

@@ -53,8 +53,8 @@ Architektura integruje zasady **`wellmanifest/nohardcode`**, **`wellmanifest/sso
 ### NUL-019 (Single-Pass Typed URI Decision Without Free-Form Generation)
 Silniki decyzyjne tłumaczące zapytania NL i stan aplikacji na wywołania procesów DockURI (`proc://`, `dockuri://`) oraz Action URI **MUSZĄ**:
 1. Formułować decyzję jako ustrukturyzowany wektor pytań typowanych (`choice`, `score`, `noul`) ocenianych w jednym przebiegu (*single forward pass*) bez autoregresyjnego generowania swobodnego tekstu:
-   - `choice`: wybór kanonicznego adresu URI spośród dynamicznego zbioru **od 2 do 255 kandydatów** wyekstrahowanych z katalogu `dockuri/proc-v1` lub rejestru `ProcessUriRegistry`,
-   - `score`: numeryczna ocena ryzyka operacyjnego lub pewności wykonania na skali rubrykowej (np. `1..3`),
+   - `choice`: wybór kanonicznego, hierarchicznego adresu **Action URI** (`scheme://authority/path[?query]` zgodnego z gramatyką `^[a-z][a-z0-9+.-]*://[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*(?:\?[A-Za-z0-9_.,=&%+-]+)?$`, bez spacji i pustych segmentów ścieżki) spośród dynamicznego zbioru **od 2 do 255 kandydatów** wyekstrahowanych z katalogu `dockuri/proc-v1` lub rejestru `ProcessUriRegistry`,
+   - `score`: dyskretna ocena ryzyka operacyjnego na skali rubrykowej `1..3` (opcje `"1"`, `"2"`, `"3"` oraz wynik całkowity `1 | 2 | 3`),
    - `noul`: binarna bramka bezpieczeństwa, autonomii i braku negacji (`true` / `false`).
 2. Zwracać znormalizowany rozkład prawdopodobieństwa ($\sum P(o_i) = 1.0$) dla wszystkich dozwolonych opcji każdego pytania.
 
