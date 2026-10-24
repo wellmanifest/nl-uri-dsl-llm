@@ -179,10 +179,12 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
             schema,
         )
 
-    # Reject non-RFC-3986 or malformed Action URIs (spaces, missing authority)
+    # Reject non-RFC-3986 or malformed Action URIs (spaces, missing authority, backslash instead of '?' query delimiter)
     for bad_uri in (
         "not_a_valid_uri",
         "proc://heyasa/test with spaces",
+        "proc://heyasa/test?query with spaces=1",
+        "proc://heyasa/test\\suite=unit",
         "proc:///missing-authority",
         "://missing-scheme",
     ):
