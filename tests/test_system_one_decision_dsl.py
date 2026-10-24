@@ -138,3 +138,36 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
     )
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(instance=incomplete_noul, schema=schema)
+
+    # Reject invalid question options for score and noul conditional schemas
+    invalid_noul_options = dict(
+        valid_decision,
+        questions=[
+            valid_decision["questions"][0],
+            valid_decision["questions"][1],
+            {
+                "id": "execution_allowed",
+                "type": "noul",
+                "question": "Is immediate execution safe?",
+                "options": ["yes", "no", "maybe"],
+            },
+        ],
+    )
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(instance=invalid_noul_options, schema=schema)
+
+    invalid_score_options = dict(
+        valid_decision,
+        questions=[
+            valid_decision["questions"][0],
+            {
+                "id": "risk_score",
+                "type": "score",
+                "question": "Score risk level.",
+                "options": ["low", "high"],
+            },
+            valid_decision["questions"][2],
+        ],
+    )
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(instance=invalid_score_options, schema=schema)

@@ -92,9 +92,69 @@
             "type": "array",
             "minItems": 2,
             "maxItems": 255,
+            "uniqueItems": true,
             "items": { "type": "string", "minLength": 1 }
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "type": { "const": "choice" } }
+            },
+            "then": {
+              "properties": {
+                "options": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 255,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "score" } }
+            },
+            "then": {
+              "properties": {
+                "options": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": ["1", "2", "3"]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": { "type": { "const": "noul" } }
+            },
+            "then": {
+              "properties": {
+                "options": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "enum": ["true", "false"]
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "answers": {
