@@ -21,9 +21,10 @@ TEN_JEV_FAMILIES = (
 
 
 def validate_system_one_decision_envelope(instance: dict, schema: dict) -> None:
-    """Enforce JSON Schema and NUL-019 probability key coverage + normalization (sum == 1.0)."""
+    """Enforce JSON Schema and NUL-019 cross-field consistency + probability normalization (sum == 1.0)."""
     jsonschema.validate(instance=instance, schema=schema)
     probs = instance["probabilities"]
+    questions_by_id = {q["id"]: q for q in instance["questions"]}
     for q in instance["questions"]:
         qid = q["id"]
         if qid not in probs:
@@ -36,6 +37,17 @@ def validate_system_one_decision_envelope(instance: dict, schema: dict) -> None:
         total = sum(float(v) for v in dist.values())
         if abs(total - 1.0) > 1e-6:
             raise ValueError(f"Probabilities for '{qid}' do not sum to 1.0 (got {total})")
+
+    answers = instance["answers"]
+    choice_options = set(questions_by_id["uri_choice"]["options"])
+    if answers["uri_choice"] not in choice_options:
+        raise ValueError("answers.uri_choice is not in questions[0].options")
+    if instance["selected_uri"] != answers["uri_choice"]:
+        raise ValueError("selected_uri must equal answers.uri_choice")
+    if instance["risk_score"] != answers["risk_score"]:
+        raise ValueError("risk_score must equal answers.risk_score")
+    if instance["execution_allowed"] != answers["execution_allowed"]:
+        raise ValueError("execution_allowed must equal answers.execution_allowed")
 
 
 def test_system_one_decision_spec_exists_and_declares_rules_and_models():
@@ -130,7 +142,42 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
 
     # Accept hierarchical RFC 3986 Action URIs with ports, percent-encoding, queries, and fragments
     complex_uri = "https://example.com:8443/a%20b?x=1&y=2#section"
-    jsonschema.validate(instance=dict(valid_decision, selected_uri=complex_uri), schema=schema)
+    complex_decision = dict(
+        valid_decision,
+        questions=[
+            {
+                "id": "uri_choice",
+                "type": "choice",
+                "question": "Select the canonical DockURI / Action URI.",
+                "options": [complex_uri, "proc://heyasa/lint"],
+            },
+            valid_decision["questions"][1],
+            valid_decision["questions"][2],
+        ],
+        answers={**valid_decision["answers"], "uri_choice": complex_uri},
+        probabilities={
+            **valid_decision["probabilities"],
+            "uri_choice": {complex_uri: 0.9, "proc://heyasa/lint": 0.1},
+        },
+        selected_uri=complex_uri,
+    )
+    validate_system_one_decision_envelope(complex_decision, schema)
+
+    # Reject contradictory selected_uri != answers.uri_choice or not in questions[0].options
+    with pytest.raises(ValueError, match="selected_uri must equal answers.uri_choice"):
+        validate_system_one_decision_envelope(
+            dict(valid_decision, selected_uri="proc://heyasa/lint"),
+            schema,
+        )
+    with pytest.raises(ValueError, match="not in questions\\[0\\]\\.options"):
+        validate_system_one_decision_envelope(
+            dict(
+                valid_decision,
+                answers={**valid_decision["answers"], "uri_choice": "proc://other/unlisted"},
+                selected_uri="proc://other/unlisted",
+            ),
+            schema,
+        )
 
     # Reject non-RFC-3986 or malformed Action URIs (spaces, missing authority)
     for bad_uri in (
@@ -166,7 +213,7 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(instance=incomplete_noul, schema=schema)
 
-    # Reject invalid question options for score and noul conditional schemas
+    # Reject invalid question options or wrong question IDs for tuple prefixItems
     invalid_noul_options = dict(
         valid_decision,
         questions=[

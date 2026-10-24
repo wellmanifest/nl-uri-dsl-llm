@@ -21,6 +21,18 @@
     "applied_constraints"
   ],
   "additionalProperties": false,
+  "$defs": {
+    "actionUri": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:\\?[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
+    },
+    "probability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    }
+  },
   "properties": {
     "schema": {
       "type": "string",
@@ -76,97 +88,75 @@
     },
     "questions": {
       "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "required": ["id", "type", "question", "options"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "string", "minLength": 1 },
-          "type": {
-            "type": "string",
-            "enum": ["choice", "score", "noul"]
-          },
-          "question": { "type": "string", "minLength": 1 },
-          "options": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 255,
-            "uniqueItems": true,
-            "items": { "type": "string", "minLength": 1 }
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "uri_choice" },
+            "type": { "const": "choice" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 255,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/actionUri" }
+            }
           }
         },
-        "allOf": [
-          {
-            "if": {
-              "properties": { "type": { "const": "choice" } }
-            },
-            "then": {
-              "properties": {
-                "options": {
-                  "type": "array",
-                  "minItems": 2,
-                  "maxItems": 255,
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string",
-                    "format": "uri",
-                    "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:\\?[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
-                  }
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": { "type": { "const": "score" } }
-            },
-            "then": {
-              "properties": {
-                "options": {
-                  "type": "array",
-                  "minItems": 3,
-                  "maxItems": 3,
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string",
-                    "enum": ["1", "2", "3"]
-                  }
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": { "type": { "const": "noul" } }
-            },
-            "then": {
-              "properties": {
-                "options": {
-                  "type": "array",
-                  "minItems": 2,
-                  "maxItems": 2,
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "string",
-                    "enum": ["true", "false"]
-                  }
-                }
-              }
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "risk_score" },
+            "type": { "const": "score" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "prefixItems": [
+                { "const": "1" },
+                { "const": "2" },
+                { "const": "3" }
+              ]
             }
           }
-        ]
-      }
+        },
+        {
+          "type": "object",
+          "required": ["id", "type", "question", "options"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "const": "execution_allowed" },
+            "type": { "const": "noul" },
+            "question": { "type": "string", "minLength": 1 },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "prefixItems": [
+                { "const": "true" },
+                { "const": "false" }
+              ]
+            }
+          }
+        }
+      ]
     },
     "answers": {
       "type": "object",
       "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "additionalProperties": false,
       "properties": {
-        "uri_choice": {
-          "type": "string",
-          "format": "uri",
-          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:\\?[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
-        },
+        "uri_choice": { "$ref": "#/$defs/actionUri" },
         "risk_score": {
           "type": "integer",
           "enum": [1, 2, 3]
@@ -174,47 +164,28 @@
         "execution_allowed": {
           "type": "boolean"
         }
-      },
-      "additionalProperties": true
+      }
     },
     "probabilities": {
       "type": "object",
       "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "additionalProperties": false,
       "properties": {
         "uri_choice": {
           "type": "object",
           "minProperties": 2,
           "maxProperties": 255,
-          "propertyNames": {
-            "format": "uri",
-            "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:\\?[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
-          },
-          "additionalProperties": {
-            "type": "number",
-            "minimum": 0.0,
-            "maximum": 1.0
-          }
+          "propertyNames": { "$ref": "#/$defs/actionUri" },
+          "additionalProperties": { "$ref": "#/$defs/probability" }
         },
         "risk_score": {
           "type": "object",
           "required": ["1", "2", "3"],
           "additionalProperties": false,
           "properties": {
-            "1": {
-              "type": "number",
-              "minimum": 0.0,
-              "maximum": 1.0
-            },
-            "2": {
-              "type": "number",
-              "minimum": 0.0,
-              "maximum": 1.0
-            },
-            "3": {
-              "type": "number",
-              "minimum": 0.0,
-              "maximum": 1.0
-            }
+            "1": { "$ref": "#/$defs/probability" },
+            "2": { "$ref": "#/$defs/probability" },
+            "3": { "$ref": "#/$defs/probability" }
           }
         },
         "execution_allowed": {
@@ -222,42 +193,17 @@
           "required": ["true", "false"],
           "additionalProperties": false,
           "properties": {
-            "true": {
-              "type": "number",
-              "minimum": 0.0,
-              "maximum": 1.0
-            },
-            "false": {
-              "type": "number",
-              "minimum": 0.0,
-              "maximum": 1.0
-            }
+            "true": { "$ref": "#/$defs/probability" },
+            "false": { "$ref": "#/$defs/probability" }
           }
-        }
-      },
-      "additionalProperties": {
-        "type": "object",
-        "minProperties": 2,
-        "additionalProperties": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0
         }
       }
     },
-    "selected_uri": {
-      "type": "string",
-      "format": "uri",
-      "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://[A-Za-z0-9._~%-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~%!$&'()*+,;=:@-]*)*(?:\\?[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?(?:#[A-Za-z0-9._~%!$&'()*+,;=:@/?-]*)?$"
-    },
+    "selected_uri": { "$ref": "#/$defs/actionUri" },
     "selected_action_id": {
       "type": "string"
     },
-    "confidence": {
-      "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
-    },
+    "confidence": { "$ref": "#/$defs/probability" },
     "risk_score": {
       "type": "integer",
       "enum": [1, 2, 3]
