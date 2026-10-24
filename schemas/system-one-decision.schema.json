@@ -166,9 +166,8 @@
           "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
         },
         "risk_score": {
-          "type": "number",
-          "minimum": 1.0,
-          "maximum": 3.0
+          "type": "integer",
+          "enum": [1, 2, 3]
         },
         "execution_allowed": {
           "type": "boolean"
@@ -195,12 +194,24 @@
         },
         "risk_score": {
           "type": "object",
-          "minProperties": 2,
           "required": ["1", "2", "3"],
-          "additionalProperties": {
-            "type": "number",
-            "minimum": 0.0,
-            "maximum": 1.0
+          "additionalProperties": false,
+          "properties": {
+            "1": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            },
+            "2": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            },
+            "3": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            }
           }
         },
         "execution_allowed": {
@@ -244,9 +255,8 @@
       "maximum": 1.0
     },
     "risk_score": {
-      "type": "number",
-      "minimum": 1.0,
-      "maximum": 3.0
+      "type": "integer",
+      "enum": [1, 2, 3]
     },
     "execution_allowed": {
       "type": "boolean"

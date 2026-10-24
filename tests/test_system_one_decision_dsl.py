@@ -20,6 +20,24 @@ TEN_JEV_FAMILIES = (
 )
 
 
+def validate_system_one_decision_envelope(instance: dict, schema: dict) -> None:
+    """Enforce JSON Schema and NUL-019 probability key coverage + normalization (sum == 1.0)."""
+    jsonschema.validate(instance=instance, schema=schema)
+    probs = instance["probabilities"]
+    for q in instance["questions"]:
+        qid = q["id"]
+        if qid not in probs:
+            raise ValueError(f"Missing probability distribution for question '{qid}'")
+        dist = probs[qid]
+        expected_options = set(q["options"])
+        actual_options = set(dist.keys())
+        if actual_options != expected_options:
+            raise ValueError(f"Probability keys {actual_options} do not match allowed options {expected_options} for '{qid}'")
+        total = sum(float(v) for v in dist.values())
+        if abs(total - 1.0) > 1e-6:
+            raise ValueError(f"Probabilities for '{qid}' do not sum to 1.0 (got {total})")
+
+
 def test_system_one_decision_spec_exists_and_declares_rules_and_models():
     spec_path = SPEC_DIR / "SYSTEM_ONE_DECISION_DSL.md"
     assert spec_path.exists()
@@ -75,7 +93,7 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
         ],
         "answers": {
             "uri_choice": "proc://heyasa/test",
-            "risk_score": 1.15,
+            "risk_score": 1,
             "execution_allowed": True,
         },
         "probabilities": {
@@ -90,7 +108,7 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
         "selected_uri": "proc://heyasa/test",
         "selected_action_id": "dockuri.heyasa.test",
         "confidence": 0.91,
-        "risk_score": 1.15,
+        "risk_score": 1,
         "execution_allowed": True,
         "blocked_by_constraint": False,
         "applied_constraints": [],
@@ -98,12 +116,12 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
         "transport": "local-zero-gen",
     }
 
-    jsonschema.validate(instance=valid_decision, schema=schema)
+    validate_system_one_decision_envelope(valid_decision, schema)
 
     # Validate all 10 model families are accepted by the schema enum
     for family in TEN_JEV_FAMILIES:
         candidate = dict(valid_decision, family=family, model_profile_id=family)
-        jsonschema.validate(instance=candidate, schema=schema)
+        validate_system_one_decision_envelope(candidate, schema)
 
     # Reject unknown model family
     invalid_family = dict(valid_decision, family="unknown-model")
@@ -171,3 +189,38 @@ def test_system_one_decision_schema_validates_envelope_and_constraints():
     )
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(instance=invalid_score_options, schema=schema)
+
+    # Reject non-discrete risk_score values and undeclared risk_score probability keys
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(instance=dict(valid_decision, risk_score=1.5), schema=schema)
+
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(
+            instance=dict(
+                valid_decision,
+                probabilities={
+                    **valid_decision["probabilities"],
+                    "risk_score": {"1": 0.7, "2": 0.2, "3": 0.05, "4": 0.05},
+                },
+            ),
+            schema=schema,
+        )
+
+    # Reject under-normalized and over-normalized distributions across each question head (NUL-019)
+    for head_key, bad_dist in (
+        ("uri_choice", {"proc://heyasa/test": 0.50, "proc://heyasa/lint": 0.10, "proc://willmux/start": 0.10}),
+        ("uri_choice", {"proc://heyasa/test": 0.80, "proc://heyasa/lint": 0.30, "proc://willmux/start": 0.20}),
+        ("risk_score", {"1": 0.40, "2": 0.20, "3": 0.10}),
+        ("risk_score", {"1": 0.80, "2": 0.30, "3": 0.20}),
+        ("execution_allowed", {"true": 0.40, "false": 0.20}),
+        ("execution_allowed", {"true": 0.80, "false": 0.50}),
+    ):
+        bad_instance = dict(
+            valid_decision,
+            probabilities={
+                **valid_decision["probabilities"],
+                head_key: bad_dist,
+            },
+        )
+        with pytest.raises(ValueError, match="do not sum to 1.0"):
+            validate_system_one_decision_envelope(bad_instance, schema)
