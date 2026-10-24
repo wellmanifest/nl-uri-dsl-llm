@@ -1,3 +1,10 @@
+# 1.5.0 — 2026-10-24
+
+- Add the System One / Jev-Compatible Typed Decision DSL and Model Profiles specification (`spec/SYSTEM_ONE_DECISION_DSL.md`, `system-one-decision-v1`).
+- Add normative rules `NUL-019` (Single-Pass Typed URI Decision Without Free-Form Generation), `NUL-020` (Cross-Question Policy-DSL Constraint Enforcement), `NUL-021` (SSOT Catalog of 10 Open-Source Jev / System One Model Families), and `NUL-022` (Dynamic Telemetry and Language-Aware Model Profile Routing).
+- Add machine-verifiable JSON Schema `schemas/system-one-decision.schema.json` (`wellmanifest.system-one-decision/v1`).
+- Add automated conformance and validation tests (`tests/test_system_one_decision_dsl.py`).
+
 # 1.4.0 — 2026-10-11
 
 - Add the MCP Process Gateway, Fleet Batch Execution, and LLM Cost Attribution profile (`spec/MCP_FLEET_EXECUTION_DSL.md`, `mcp-fleet-dsl-v1`).

@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.com/schemas/system-one-decision.schema.json",
+  "title": "Wellmanifest System One / Jev-Compatible Typed Decision Envelope",
+  "description": "Validates single-pass System One / Jev typed decision requests and responses (choice, score, noul) over DockURI and Action URI candidates with policy-dsl cross-question constraints (NUL-019..022).",
+  "type": "object",
+  "required": [
+    "schema",
+    "model_profile_id",
+    "family",
+    "wire_format",
+    "state",
+    "questions",
+    "answers",
+    "probabilities",
+    "selected_uri",
+    "confidence",
+    "risk_score",
+    "execution_allowed",
+    "blocked_by_constraint",
+    "applied_constraints"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "wellmanifest.system-one-decision/v1"
+    },
+    "model_profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "clef",
+        "gliner2.5-decide",
+        "laya",
+        "kev",
+        "laya-mlx",
+        "semif",
+        "nanojev",
+        "bespoke-nimble",
+        "jevlike",
+        "jevos"
+      ]
+    },
+    "wire_format": {
+      "type": "string",
+      "enum": [
+        "jev-system-one",
+        "gliner2-schema",
+        "system-one",
+        "typesafe-system-one",
+        "logit-scoring",
+        "token-score",
+        "candidate-scorer",
+        "typesafe-jev"
+      ]
+    },
+    "state": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string", "minLength": 1 },
+        "autonomy_mode": {
+          "type": "string",
+          "enum": ["suggest", "confirm", "auto", "full"]
+        },
+        "modality": {
+          "type": "string",
+          "enum": ["text", "json", "image", "video", "multimodal"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "question", "options"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "type": {
+            "type": "string",
+            "enum": ["choice", "score", "noul"]
+          },
+          "question": { "type": "string", "minLength": 1 },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 255,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "answers": {
+      "type": "object",
+      "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "properties": {
+        "uri_choice": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+        },
+        "risk_score": {
+          "type": "number",
+          "minimum": 1.0,
+          "maximum": 3.0
+        },
+        "execution_allowed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "probabilities": {
+      "type": "object",
+      "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "selected_uri": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+    },
+    "selected_action_id": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "risk_score": {
+      "type": "number",
+      "minimum": 1.0,
+      "maximum": 3.0
+    },
+    "execution_allowed": {
+      "type": "boolean"
+    },
+    "blocked_by_constraint": {
+      "type": "boolean"
+    },
+    "applied_constraints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "latency_ms": {
+      "type": "number",
+      "minimum": 0.0
+    },
+    "transport": {
+      "type": "string",
+      "enum": ["local-zero-gen", "http-system-one", "workers-ai", "mlx-local", "openvino-local"]
+    }
+  }
+}
