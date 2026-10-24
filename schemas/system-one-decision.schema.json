@@ -119,8 +119,51 @@
     "probabilities": {
       "type": "object",
       "required": ["uri_choice", "risk_score", "execution_allowed"],
+      "properties": {
+        "uri_choice": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 255,
+          "propertyNames": {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+"
+          },
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        },
+        "risk_score": {
+          "type": "object",
+          "minProperties": 2,
+          "required": ["1", "2", "3"],
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        },
+        "execution_allowed": {
+          "type": "object",
+          "required": ["true", "false"],
+          "additionalProperties": false,
+          "properties": {
+            "true": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            },
+            "false": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            }
+          }
+        }
+      },
       "additionalProperties": {
         "type": "object",
+        "minProperties": 2,
         "additionalProperties": {
           "type": "number",
           "minimum": 0.0,
