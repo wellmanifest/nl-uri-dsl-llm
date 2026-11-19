@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wellmanifest-nl-uri-dsl-llm"
-version = "0.1.0"
+version = "1.5.0"
 description = "Normative specification and schemas for Natural Language to Action URI/Resource URN (DSL) and Conversational Process Isolation"
 readme = "README.md"
 requires-python = ">=3.11"
