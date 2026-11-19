@@ -7,7 +7,7 @@ import argparse
 import hashlib
 import json
 import re
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 LEVELS = {f"S{index}": index for index in range(6)}
@@ -104,6 +104,17 @@ def catalog_findings(catalog: Any) -> list[dict[str, str]]:
                 or not isinstance(target, str) or target not in pack_ids):
             findings.append(finding("STD-PACK-ALIAS", f"invalid compatibility alias: {alias} -> {target}"))
     catalog_profile_findings(profiles, pack_ids, findings)
+    for name, model in models.items():
+        if not isinstance(name, str) or not name.strip():
+            findings.append(finding("STD-PACK-CATALOG", "execution model name must be nonempty"))
+        if not isinstance(model, dict):
+            findings.append(finding("STD-PACK-CATALOG", f"execution model {name} must be an object"))
+            continue
+        level = model.get("maximumLevel")
+        if not isinstance(level, str) or level not in LEVELS:
+            findings.append(finding("STD-PACK-CATALOG", f"execution model {name} has invalid maximumLevel"))
+        if not isinstance(model.get("authorizesEffects"), bool):
+            findings.append(finding("STD-PACK-CATALOG", f"execution model {name} authorizesEffects must be boolean"))
     return findings
 
 
@@ -132,6 +143,25 @@ def profile_requirements(catalog: dict[str, Any], name: str) -> dict[str, str]:
     return result
 
 
+CI_EVIDENCE = (".github/workflows/", ".onedev-buildspec", ".governance/required-checks.json")
+EXTERNAL_EVIDENCE = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]+:")  # RFC 3986 scheme (2+ chars, not a drive letter)
+
+
+def evidence_proves(root, item) -> bool:
+    """External proof is taken as declared; repository evidence must exist and match its digest."""
+    uri = item["uri"]
+    if EXTERNAL_EVIDENCE.match(uri):
+        return True
+    if PureWindowsPath(uri).drive or PureWindowsPath(uri).root or ".." in Path(uri).parts:
+        return False
+    try:
+        path = (root / uri).resolve()
+        path.relative_to(root.resolve())
+        return path.is_file() and sha256(path) == item["sha256"]
+    except (OSError, ValueError, RuntimeError):
+        return False
+
+
 def adoption_artifact_findings(root, pack_id, record, level, findings) -> None:
     artifacts = record.get("artifacts")
     if LEVELS[level] >= LEVELS["S2"] and not isinstance(artifacts, list):
@@ -143,14 +173,24 @@ def adoption_artifact_findings(root, pack_id, record, level, findings) -> None:
             continue
         target = artifact.get("target")
         expected_digest = artifact.get("sha256")
-        if not isinstance(target, str) or target.startswith("/") or ".." in Path(target).parts:
+        if (not isinstance(target, str) or not target
+                or PureWindowsPath(target).drive or PureWindowsPath(target).root
+                or ".." in PureWindowsPath(target).parts or ".." in Path(target).parts):
             findings.append(finding("STD-ADOPTION-ARTIFACT", f"unsafe target for {pack_id}"))
             continue
-        target_path = root / target
-        if not target_path.is_file():
-            findings.append(finding("STD-ADOPTION-MISSING", f"managed projection is missing for {pack_id}", target))
-        elif SHA64.fullmatch(str(expected_digest or "")) is None or sha256(target_path) != expected_digest:
-            findings.append(finding("STD-ADOPTION-DRIFT", f"managed projection drift for {pack_id}", target))
+        try:
+            target_path = (root / target).resolve()
+            target_path.relative_to(root.resolve())
+        except (OSError, ValueError, RuntimeError):
+            findings.append(finding("STD-ADOPTION-ARTIFACT", f"unsafe target for {pack_id}", target))
+            continue
+        try:
+            if not target_path.is_file():
+                findings.append(finding("STD-ADOPTION-MISSING", f"managed projection is missing for {pack_id}", target))
+            elif SHA64.fullmatch(str(expected_digest or "")) is None or sha256(target_path) != expected_digest:
+                findings.append(finding("STD-ADOPTION-DRIFT", f"managed projection drift for {pack_id}", target))
+        except OSError:
+            findings.append(finding("STD-ADOPTION-ARTIFACT", f"cannot read managed projection for {pack_id}", target))
 
 def adoption_record_findings(root, pack_id, record, models, findings) -> None:
     level = record.get("level")
@@ -164,15 +204,31 @@ def adoption_record_findings(root, pack_id, record, models, findings) -> None:
     if not isinstance(revision, str) or SHA40.fullmatch(revision) is None:
         findings.append(finding("STD-ADOPTION-REVISION", f"{pack_id} needs an immutable 40-character revision"))
     evidence = record.get("evidence")
-    evidence_levels = {
-        item.get("level") for item in evidence or []
-        if isinstance(item, dict) and isinstance(item.get("uri"), str)
-        and SHA64.fullmatch(str(item.get("sha256", "")))
-    }
+    by_level = {}
+    for item in evidence or []:
+        if (isinstance(item, dict) and isinstance(item.get("uri"), str)
+                and SHA64.fullmatch(str(item.get("sha256", ""))) and evidence_proves(root, item)):
+            by_level.setdefault(item.get("level"), item)
     for index in range(LEVELS[level] + 1):
         expected = f"S{index}"
-        if expected not in evidence_levels:
+        if expected not in by_level:
             findings.append(finding("STD-ADOPTION-EVIDENCE", f"{pack_id} lacks valid {expected} evidence"))
+    s3 = by_level.get("S3")
+    if s3 and not (EXTERNAL_EVIDENCE.match(s3["uri"]) or s3["uri"].startswith(CI_EVIDENCE)):
+        findings.append(finding("STD-ADOPTION-EVIDENCE", f"{pack_id} S3 evidence must be a CI definition or external proof", s3["uri"]))
+    for upper in ("S4", "S5"):
+        item = by_level.get(upper)
+        if item and not EXTERNAL_EVIDENCE.match(item["uri"]):
+            findings.append(finding("STD-ADOPTION-EVIDENCE", f"{pack_id} {upper} evidence must be external proof (hosted ruleset or runtime receipt)", item["uri"]))
+    lower = {by_level[f"S{i}"]["uri"] for i in range(3) if f"S{i}" in by_level}
+    seen = set()
+    for upper in ("S3", "S4", "S5"):
+        item = by_level.get(upper)
+        if item is None:
+            continue
+        if item["uri"] in lower or item["uri"] in seen:
+            findings.append(finding("STD-ADOPTION-EVIDENCE", f"{pack_id} {upper} evidence reuses lower-level proof", item["uri"]))
+        seen.add(item["uri"])
     adoption_artifact_findings(root, pack_id, record, level, findings)
 
 

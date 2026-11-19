@@ -19,8 +19,8 @@ test = [
 ]
 
 [tool.wellmanifest]
-standard = "0.20.65"
-revision = "30ada2d6f171ee11d029a07ea55d1993c25c7fe0"
+standard = "0.20.163"
+revision = "6738f734d7f19e178996c671c26e4165e8b21d4a"
 gate = "project/governance-check.sh"
 adopts = [
     "wellmanifest/nl-dsl-llm@0.1.0",
